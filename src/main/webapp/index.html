@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta name=viewport content="width=device-width, initial-scale=1"/>
+<title>drink.kit.to</title>
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+<link rel="stylesheet" href="css/default.css"/>
+<script type="text/javascript" defer src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" defer src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript" defer src="js/index.js"></script>
+</head>
+
+<body>
+  <div data-role="page">
+    <div data-role="header" data-theme="b" data-position="fixed">
+      <a href="#preferencePanel" class="ui-btn ui-btn-left ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-gear ui-btn-icon-notext"></a>
+      <h1>drink.kit.to</h1>
+      <a href="#aboutPanel" class="ui-btn ui-btn-right ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-info ui-btn-icon-notext"></a>
+    </div>
+    <div data-role="content">
+      <ul data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="">
+        <li class="cell">
+           <img src="img/chimay.jpg"/>
+           <h3>
+             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAUCAIAAADp3DFZAAAABmJLR0QA/wD/AP+gvaeTAAAALUlEQVQ4jWNkwAaCvMRWTNPBFP/e9uvP4b+Y4kxYTSEVjJoyasqoKaOmjARTADyKB3dQow4IAAAAAElFTkSuQmCC"/>
+             シメイ レッド
+           </h3>
+           <div class="attribute">
+             <span class="abv">7.0</span>
+             <span class="tag">アビー</span>
+             <span class="tag">トラピスト</span>
+           </div>
+           <p>スクールモン修道院で醸造されるトラピストビール。
+フルーティーな香りがある。</p>
+        </li>
+        <li class="cell">
+           <img src="img/chimay.jpg"/>
+           <h3>
+             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAUCAIAAADp3DFZAAAABmJLR0QA/wD/AP+gvaeTAAAALUlEQVQ4jWNkwAaCvMRWTNPBFP/e9uvP4b+Y4kxYTSEVjJoyasqoKaOmjARTADyKB3dQow4IAAAAAElFTkSuQmCC"/>
+             ジネビア
+           </h3>
+           <div class="attribute">
+             <span class="abv">6.0</span>
+             <span class="tag">エール</span>
+           </div>
+           <p>St.デラセーヌ醸造所で造られる苦味が効いたベルジャンエール</p>
+        </li>
+      </ul>
+    </div>
+    <div data-role="footer" data-position="fixed">
+      <div data-role="navbar">
+        <ul>
+          <li><a href="#countryPanel" data-icon="bullets">Country</a></li>
+          <li><a href="#abvPanel" data-icon="star">ABV</a></li>
+          <li><a href="#" data-icon="tag">Tags</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="preferencePanel" data-role="panel" data-position="left" data-position-fixed="true">
+      <div class="ui-bar ui-bar-a ui-corner-all">Language</div>
+      <div id="languageList" data-role="controlgroup"></div>
+    </div>
+    <div id="countryPanel" data-role="panel" data-position="left" data-position-fixed="true">
+      <div id="countryList" data-role="controlgroup" data-iconpos="right">
+        <input id="c-america" type="checkbox"/>
+        <label for="c-america">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAANCAIAAADTzFK5AAAABmJLR0QA/wD/AP+gvaeTAAABCElEQVQoke3OQUrDQBiG4X9EoVUSUEJTYjKmGTNDnCz1FOI1eh1v4QF06w3chikhKek0TWksuCilkLRmPIIdcOm3/nh50Hj8PM0rzv0kKRjzACBNyzgeCTEjxHl8f4Gjd1rO6+gOF8WKc3+73aET4LFfFKsownm+fJp+aLQsywTVDWyj69TllYFANc33wDaUUpZlvpEHjVb/vJ/nS0pxms7D8BpAZdmSMZxlJca2nmvf7hnzmuZAqdfrnSEEjHltewhDd7PZ6bkWizVjrpR1QIb15xcoZJoXUtbkdlhVaz3XKHAmk5LzmySZUeoihISQcewLIQlxtFxIKXX8+5fWa3D/Z61/l9Z+ALOBdvrGHmHHAAAAAElFTkSuQmCC"/>
+          アメリカ
+        </label>
+        <input id="c-be" type="checkbox"/>
+        <label for="c-be">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAUCAIAAADp3DFZAAAABmJLR0QA/wD/AP+gvaeTAAAALUlEQVQ4jWNkwAaCvMRWTNPBFP/e9uvP4b+Y4kxYTSEVjJoyasqoKaOmjARTADyKB3dQow4IAAAAAElFTkSuQmCC"/>
+          ベルギー
+        </label>
+      </div>
+    </div>
+    <div id="abvPanel" data-role="panel" data-position="left" data-position-fixed="true">
+      <div class="ui-bar ui-bar-a ui-corner-all">ABV</div>
+      <div data-role="rangeslider" data-mini="true">
+        <input id="abv-lo" min="0" max="67.5" step=".5" value="0" type="range">
+        <input id="abv-hi" min="0" max="67.5" step=".5" value="67.5" type="range">
+      </div>
+    </div>
+    <div id="aboutPanel" data-role="panel" data-position="right" data-position-fixed="true">
+      <div class="ui-bar ui-bar-a ui-corner-all">About...</div>
+      <div class="photo"><img src="img/about.jpeg"/></div>
+      <div class="ui-body ui-body-a ui-corner-all">
+        Without liquor should not alive.
+        <br/>
+        <a href="https://twitter.com/buchikichi" target="_blank">Twitter</a><br/>
+        <a href="https://github.com/Buchikichi" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </div>
+<script>
+/*
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-74094631-2', 'auto');
+  ga('send', 'pageview');
+*/
+</script>
+</body>
+</html>

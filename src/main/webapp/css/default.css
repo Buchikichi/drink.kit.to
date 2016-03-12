@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+div.photo {
+	text-align: center;
+}
+div.photo img {
+	border-radius: 4px;
+}
+li.cell {
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+li.cell > img {
+	cursor: pointer;
+}
+li.cell div.attribute {
+	font-size: .75em;
+}
+li.cell span.abv {
+	color: white;
+	background-color: #777777;
+	padding: .2em .6em;
+	border: 1px solid #cccccc;
+	border-radius: .5em;
+}
+li.cell span.tag {
+	color: white;
+	background-color: #38c;
+	padding: .2em .6em;
+	border-radius: .25em;
+}
+li.cell > p {
+	white-space: pre;
+}
