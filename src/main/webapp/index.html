@@ -14,27 +14,26 @@
 <body>
   <div data-role="page">
     <div data-role="header" data-theme="b" data-position="fixed">
-      <a href="#preferencePanel" class="ui-btn ui-btn-left ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-gear ui-btn-icon-notext"></a>
+      <a href="detail.html" class="ui-btn ui-btn-left ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus ui-btn-icon-notext" data-transition="pop" data-ajax="false"></a>
       <h1>drink.kit.to</h1>
-      <a href="#aboutPanel" class="ui-btn ui-btn-right ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-info ui-btn-icon-notext"></a>
+      <a href="#preferencePanel" class="ui-btn ui-btn-right ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-gear ui-btn-icon-notext"></a>
     </div>
     <div data-role="content">
-      <ul data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="">
+      <ul id="searchList" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="">
+<!--
         <li class="cell">
-           <img src="img/chimay.jpg"/>
-           <h3>
-             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAUCAIAAADp3DFZAAAABmJLR0QA/wD/AP+gvaeTAAAALUlEQVQ4jWNkwAaCvMRWTNPBFP/e9uvP4b+Y4kxYTSEVjJoyasqoKaOmjARTADyKB3dQow4IAAAAAElFTkSuQmCC"/>
-             シメイ レッド
-           </h3>
-           <div class="attribute">
-             <span class="abv">7.0</span>
-             <span class="tag">アビー</span>
-             <span class="tag">トラピスト</span>
-           </div>
-           <p>スクールモン修道院で醸造されるトラピストビール。
-フルーティーな香りがある。</p>
+          <a href="#detailPopup" data-rel="popup">
+            <img src="img/chimay.jpg"/>
+            <span class="name">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAUCAIAAADp3DFZAAAABmJLR0QA/wD/AP+gvaeTAAAALUlEQVQ4jWNkwAaCvMRWTNPBFP/e9uvP4b+Y4kxYTSEVjJoyasqoKaOmjARTADyKB3dQow4IAAAAAElFTkSuQmCC"/>
+              シメイ ルージュ
+            </span>
+            <span class="attribute"><span class="abv">7.0</span><abbr>アビー</abbr><abbr>エール</abbr><abbr>トラピスト</abbr><abbr>ベルギービール</abbr></span>
+            <span class="comment">スクールモン修道院で醸造されるトラピストビール。
+フルーティーな香りがある。</span>
+          </a>
         </li>
-        <li class="cell">
+        <li>
            <img src="img/chimay.jpg"/>
            <h3>
              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAUCAIAAADp3DFZAAAABmJLR0QA/wD/AP+gvaeTAAAALUlEQVQ4jWNkwAaCvMRWTNPBFP/e9uvP4b+Y4kxYTSEVjJoyasqoKaOmjARTADyKB3dQow4IAAAAAElFTkSuQmCC"/>
@@ -46,33 +45,48 @@
            </div>
            <p>St.デラセーヌ醸造所で造られる苦味が効いたベルジャンエール</p>
         </li>
+-->
       </ul>
     </div>
     <div data-role="footer" data-position="fixed">
       <div data-role="navbar">
         <ul>
-          <li><a href="#countryPanel" data-icon="bullets">Country</a></li>
+          <li><a href="#countryPanel" data-icon="grid">Country</a></li>
+          <li><a href="#kindPanel" data-icon="bullets">Kind</a></li>
           <li><a href="#abvPanel" data-icon="star">ABV</a></li>
-          <li><a href="#" data-icon="tag">Tags</a></li>
+          <li><a href="#tagsPanel" data-icon="tag">Tags</a></li>
         </ul>
       </div>
     </div>
-    <div id="preferencePanel" data-role="panel" data-position="left" data-position-fixed="true">
-      <div class="ui-bar ui-bar-a ui-corner-all">Language</div>
-      <div id="languageList" data-role="controlgroup"></div>
+    <div id="detailPopup" data-role="popup" data-url="/" data-overlay-theme="b">
+      <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+      <div class="name ui-bar ui-bar-a ui-corner-all"></div>
+      <img src="img/chimay.jpg"/>
+      <form>
+        <input id="imageFile" type="file" name="picture"/>
+      </form>
+      <div class="ui-body ui-body-a ui-corner-all">
+        <span class="attribute"></span>
+      </div>
+      <a href="#tagsPopup" data-rel="popup">test</a>
+      <a href="#bar" data-rel="popup">bar</a>
+      <div class="ui-body ui-body-a ui-corner-all">
+        <span class="comment"></span>
+      </div>
+    <div id="tagsPopup" data-role="popup" class="ui-content">
+      <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+      <div>
+      さらに...
+      </div>
+    </div>
     </div>
     <div id="countryPanel" data-role="panel" data-position="left" data-position-fixed="true">
-      <div id="countryList" data-role="controlgroup" data-iconpos="right">
-        <input id="c-america" type="checkbox"/>
-        <label for="c-america">
-          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAANCAIAAADTzFK5AAAABmJLR0QA/wD/AP+gvaeTAAABCElEQVQoke3OQUrDQBiG4X9EoVUSUEJTYjKmGTNDnCz1FOI1eh1v4QF06w3chikhKek0TWksuCilkLRmPIIdcOm3/nh50Hj8PM0rzv0kKRjzACBNyzgeCTEjxHl8f4Gjd1rO6+gOF8WKc3+73aET4LFfFKsownm+fJp+aLQsywTVDWyj69TllYFANc33wDaUUpZlvpEHjVb/vJ/nS0pxms7D8BpAZdmSMZxlJca2nmvf7hnzmuZAqdfrnSEEjHltewhDd7PZ6bkWizVjrpR1QIb15xcoZJoXUtbkdlhVaz3XKHAmk5LzmySZUeoihISQcewLIQlxtFxIKXX8+5fWa3D/Z61/l9Z+ALOBdvrGHmHHAAAAAElFTkSuQmCC"/>
-          アメリカ
-        </label>
-        <input id="c-be" type="checkbox"/>
-        <label for="c-be">
-          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAUCAIAAADp3DFZAAAABmJLR0QA/wD/AP+gvaeTAAAALUlEQVQ4jWNkwAaCvMRWTNPBFP/e9uvP4b+Y4kxYTSEVjJoyasqoKaOmjARTADyKB3dQow4IAAAAAElFTkSuQmCC"/>
-          ベルギー
-        </label>
+      <div id="countryList" data-role="controlgroup" data-iconpos="right"></div>
+    </div>
+    <div id="kindPanel" data-role="panel" data-position="left" data-position-fixed="true">
+      <div class="ui-bar ui-bar-a ui-corner-all">Kind</div>
+      <div id="kindList" data-role="controlgroup">
+        <input id="kind-beer" type="checkbox"/><label for="kind-beer">Beer</label>
       </div>
     </div>
     <div id="abvPanel" data-role="panel" data-position="left" data-position-fixed="true">
@@ -82,8 +96,19 @@
         <input id="abv-hi" min="0" max="67.5" step=".5" value="67.5" type="range">
       </div>
     </div>
-    <div id="aboutPanel" data-role="panel" data-position="right" data-position-fixed="true">
-      <div class="ui-bar ui-bar-a ui-corner-all">About...</div>
+    <div id="tagsPanel" data-role="panel" data-position="left" data-position-fixed="true">
+      <div class="ui-bar ui-bar-a ui-corner-all">Tags</div>
+      <div id="tagsList" data-role="controlgroup"></div>
+    </div>
+    <div id="preferencePanel" data-role="panel" data-position="right" data-position-fixed="true">
+      <div class="ui-bar ui-bar-b ui-corner-all">Language</div>
+      <div id="languageList" data-role="controlgroup"></div>
+      <div class="ui-bar ui-bar-b ui-corner-all">Sponsor...</div>
+      <div class="ui-body ui-body-a ui-corner-all">
+        <a href="http://www.beerpub-phis.com/" target="_blank">Beer Pub phi's</a><br/>
+      </div>
+      <br/>
+      <div class="ui-bar ui-bar-b ui-corner-all">About...</div>
       <div class="photo"><img src="img/about.jpeg"/></div>
       <div class="ui-body ui-body-a ui-corner-all">
         Without liquor should not alive.

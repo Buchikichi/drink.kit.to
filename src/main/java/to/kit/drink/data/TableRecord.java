@@ -8,6 +8,7 @@ import java.util.HashMap;
  */
 public final class TableRecord extends HashMap<String, Object> {
 	private final String table;
+	private String key;
 
 	/**
 	 * インスタンス生成.
@@ -23,5 +24,19 @@ public final class TableRecord extends HashMap<String, Object> {
 	 */
 	public String getTable() {
 		return this.table;
+	}
+	/**
+	 * キーを取得.
+	 * @return キー
+	 */
+	public String getKey() {
+		return this.key;
+	}
+	/**
+	 * キーを設定.
+	 * @param val キー
+	 */
+	public void setKey(String val) {
+		this.key = val;
 	}
 }

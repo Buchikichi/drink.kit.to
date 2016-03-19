@@ -16,5 +16,7 @@ public interface DataAccessor {
 	 */
 	void create(TableRecord rec) throws Exception;
 
+	Map<String, String> read(TableRecord rec) throws Exception;
+
 	List<Map<String, String>> list(String kind) throws Exception;
 }

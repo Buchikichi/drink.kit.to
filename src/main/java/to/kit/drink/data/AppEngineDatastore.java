@@ -19,6 +19,12 @@ class AppEngineDatastore implements DataAccessor {
 	}
 
 	@Override
+	public Map<String, String> read(TableRecord rec) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public List<Map<String, String>> list(String kind) throws Exception {
 		// TODO Auto-generated method stub
 		return null;

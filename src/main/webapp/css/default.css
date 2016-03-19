@@ -5,29 +5,56 @@ div.photo {
 div.photo img {
 	border-radius: 4px;
 }
-li.cell {
-	padding-top: 0px !important;
-	padding-bottom: 0px !important;
+/*
+ * cell.
+ */
+.cell * {
+	font-weight: normal;
 }
-li.cell > img {
-	cursor: pointer;
+.cell span.name {
+	font-weight: bold;
 }
-li.cell div.attribute {
+.cell .comment {
+	font-size: small;
+}
+span.attribute {
+	display: block;
 	font-size: .75em;
 }
-li.cell span.abv {
+span.abv {
 	color: white;
 	background-color: #777777;
 	padding: .2em .6em;
 	border: 1px solid #cccccc;
 	border-radius: .5em;
 }
-li.cell span.tag {
+abbr {
+	white-space: nowrap;
+	line-height: 2em;
 	color: white;
 	background-color: #38c;
+	margin: 2px;
 	padding: .2em .6em;
 	border-radius: .25em;
 }
-li.cell > p {
-	white-space: pre;
+span.plusButton {
+	background-color: #cccccc;
+	margin: 2px;
+	padding: .2em .6em;
+	border: 1px solid #38c;
+	border-radius: .25em;
+	cursor: pointer;
+}
+
+/*
+ * detail.
+ */
+#image {
+	text-align: center;
+}
+#image img {
+	max-width: 100%;
+}
+#detail .comment {
+	white-space: pre-wrap;
 }

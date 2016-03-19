@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta name=viewport content="width=device-width, initial-scale=1"/>
+<title>drink.kit.to</title>
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+<link rel="stylesheet" href="css/default.css"/>
+<script type="text/javascript" defer src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" defer src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript" defer src="js/detail.js"></script>
+</head>
+
+<body>
+  <div data-role="page">
+    <div data-role="header" data-theme="a" data-position="fixed">
+      <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-back ui-btn-icon-notext ui-btn-left">Back</a>
+      <h1>drink.kit.to</h1>
+      <a id="editBtn" href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-edit ui-btn-icon-notext ui-btn-right">Edit</a>
+    </div>
+    <div id="detail" data-role="content">
+      <div class="name ui-bar ui-bar-a ui-corner-all"></div>
+      <div id="image"><img/></div>
+      <form>
+        <input id="imageFile" type="file" name="picture"/>
+      </form>
+      <div class="ui-body ui-body-a ui-corner-all">
+        <span class="attribute"></span>
+      </div>
+      <a href="#tagsPopup" data-rel="popup">test</a>
+      <a href="#bar" data-rel="popup">bar</a>
+      <div class="ui-body ui-body-a ui-corner-all">
+        <span class="comment"></span>
+      </div>
+      <div id="tagsPopup" data-role="popup" class="ui-content">
+        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+        <div>
+        さらに...
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+/*
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-74094631-2', 'auto');
+  ga('send', 'pageview');
+*/
+</script>
+</body>
+</html>
