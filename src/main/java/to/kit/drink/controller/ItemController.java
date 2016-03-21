@@ -30,7 +30,7 @@ public class ItemController implements Controller<ItemRequest> {
 	private DataAccessor dao = DataAccessorFactory.getInstance();
 	private GaDrive drive = new GaDrive();
 
-	private Map<String, String> readItem(String id) throws Exception {
+	private Map<String, Object> readItem(String id) throws Exception {
 		TableRecord table = new TableRecord("item");
 
 		table.setKey(id);
@@ -113,14 +113,12 @@ public class ItemController implements Controller<ItemRequest> {
 	 */
 	public byte[] image(String path) throws Exception {
 		byte[] image = null;
-		DataAccessor dataAccessor = DataAccessorFactory.getInstance();
 		TableRecord table = new TableRecord("item");
 
 		table.setKey(path);
-		Map<String, String> map = dataAccessor.read(table);
-		String imgsrc = map.get("imgsrc");
+		Map<String, Object> map = this.dao.read(table);
+		String imgsrc = (String) map.get("imgsrc");
 
-this.drive.list("");
 		if (imgsrc != null && !imgsrc.isEmpty()) {
 			byte[] bytes = this.drive.getImage(imgsrc);
 
@@ -143,9 +141,9 @@ this.drive.list("");
 	public Object read(ItemRequest form) throws Exception {
 		String lang = form.getLang();
 		String id = form.getId();
-		Map<String, String> map = readItem(id);
+		Map<String, Object> map = readItem(id);
 		Item rec = toItem(map);
-		String text = map.get(lang);
+		String text = (String) map.get(lang);
 
 		if (StringUtils.isNotBlank(text)) {
 			rec.setText(text);
@@ -164,9 +162,9 @@ this.drive.list("");
 		List<Item> list = new ArrayList<>();
 		String lang = form.getLang();
 
-		for (Map<String, String> map : this.dao.list("item")) {
+		for (Map<String, Object> map : this.dao.list("item")) {
 			Item rec = toItem(map);
-			String text = map.get(lang);
+			String text = (String) map.get(lang);
 
 			if (StringUtils.isNotBlank(text)) {
 				rec.setText(text);

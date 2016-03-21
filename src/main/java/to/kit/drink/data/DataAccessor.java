@@ -16,7 +16,19 @@ public interface DataAccessor {
 	 */
 	void save(TableRecord rec) throws Exception;
 
-	Map<String, String> read(TableRecord rec) throws Exception;
+	/**
+	 * レコード取得.
+	 * @param rec テーブル情報
+	 * @return レコード
+	 * @throws Exception 例外
+	 */
+	Map<String, Object> read(TableRecord rec) throws Exception;
 
-	List<Map<String, String>> list(String kind) throws Exception;
+	/**
+	 * 一覧取得.
+	 * @param kind 種類
+	 * @return 一覧
+	 * @throws Exception 例外
+	 */
+	List<Map<String, Object>> list(String kind) throws Exception;
 }
