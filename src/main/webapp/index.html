@@ -8,18 +8,22 @@
 <link rel="stylesheet" href="css/default.css"/>
 <script type="text/javascript" defer src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" defer src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript" defer src="js/Environment.js"></script>
+<script type="text/javascript" defer src="js/Language.js"></script>
+<script type="text/javascript" defer src="js/Country.js"></script>
+<script type="text/javascript" defer src="js/Item.js"></script>
 <script type="text/javascript" defer src="js/index.js"></script>
 </head>
 
 <body>
   <div data-role="page">
     <div data-role="header" data-theme="b" data-position="fixed">
-      <a href="detail.html" class="ui-btn ui-btn-left ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus ui-btn-icon-notext" data-transition="pop" data-ajax="false"></a>
+      <a id="createButton" href="detail.html" class="ui-btn ui-btn-left ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus ui-btn-icon-notext" data-transition="pop" data-ajax="false"></a>
       <h1>drink.kit.to</h1>
       <a href="#preferencePanel" class="ui-btn ui-btn-right ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-gear ui-btn-icon-notext"></a>
     </div>
     <div data-role="content">
-      <ul id="searchList" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="">
+      <ul id="listView" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="">
 <!--
         <li class="cell">
           <a href="#detailPopup" data-rel="popup">
@@ -68,20 +72,12 @@
       <div class="ui-body ui-body-a ui-corner-all">
         <span class="attribute"></span>
       </div>
-      <a href="#tagsPopup" data-rel="popup">test</a>
-      <a href="#bar" data-rel="popup">bar</a>
       <div class="ui-body ui-body-a ui-corner-all">
         <span class="comment"></span>
       </div>
-    <div id="tagsPopup" data-role="popup" class="ui-content">
-      <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-      <div>
-      さらに...
-      </div>
-    </div>
     </div>
     <div id="countryPanel" data-role="panel" data-position="left" data-position-fixed="true">
-      <div id="countryList" data-role="controlgroup" data-iconpos="right"></div>
+      <div id="countryList" data-role="controlgroup" data-iconpos="right" data-type="checkbox"></div>
     </div>
     <div id="kindPanel" data-role="panel" data-position="left" data-position-fixed="true">
       <div class="ui-bar ui-bar-a ui-corner-all">Kind</div>

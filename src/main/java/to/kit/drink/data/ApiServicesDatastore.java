@@ -25,25 +25,18 @@ import com.google.api.services.datastore.client.DatastoreHelper;
 import com.google.protobuf.ByteString;
 
 class ApiServicesDatastore implements DataAccessor {
-	public void create(TableRecord rec) throws GeneralSecurityException, DatastoreException, IOException {
+	public void save(TableRecord rec) throws GeneralSecurityException, DatastoreException, IOException {
 		Datastore datastore = DatastoreHelper.getDatastoreFromEnv();
 		BeginTransactionRequest.Builder treq = BeginTransactionRequest.newBuilder();
 		BeginTransactionResponse tres = datastore.beginTransaction(treq.build());
 		ByteString tx = tres.getTransaction();
-		CommitRequest.Builder creq = CommitRequest.newBuilder();
-		creq.setTransaction(tx);
-
+		CommitRequest.Builder creq = CommitRequest.newBuilder().setTransaction(tx);
 		PartitionId partitionId = PartitionId.newBuilder().build();
 		Key.Builder key = Key.newBuilder()
 				.setPartitionId(partitionId)
-				.addPathElement(Key.PathElement.newBuilder().setKind(rec.getTable()).setId(1)/*.setName(uuid)*/);
+				.addPathElement(Key.PathElement.newBuilder().setKind(rec.getTable()).setName(rec.getKey()));
 		Entity.Builder entityBuilder = Entity.newBuilder().setKey(key);
-/*
-		entityBuilder.addProperty(
-				Property.newBuilder().setName("src").setValue(Value.newBuilder().setStringValue("neko.jpg")));
-		entityBuilder
-				.addProperty(Property.newBuilder().setName("magni").setValue(Value.newBuilder().setIntegerValue(331)));
-		//*/
+
 		for (Map.Entry<String, Object> entry : rec.entrySet()) {
 			Object val = entry.getValue();
 			Value.Builder builderForValue = Value.newBuilder();
@@ -59,15 +52,13 @@ class ApiServicesDatastore implements DataAccessor {
 		}
 		Entity entity = entityBuilder.build();
 
-		creq.getMutationBuilder().addInsert(entity);
+		creq.getMutationBuilder().addUpsert(entity);
 		datastore.commit(creq.build());
 	}
 
-	private Map<String, String> toMap(EntityResult entityResult) {
+	private Map<String, String> toMap(Entity entity) {
 		Map<String, String> map = new HashMap<>();
-		Entity entity = entityResult.getEntity();
 
-		map.put("id", entity.getKey().getPathElement(0).getName());
 		for (Property prop : entity.getPropertyList()) {
 			String name = prop.getName();
 			Value value = prop.getValue();
@@ -89,7 +80,7 @@ class ApiServicesDatastore implements DataAccessor {
 		RunQueryResponse response = datastore.runQuery(request);
 
 		for (EntityResult entityResult : response.getBatch().getEntityResultList()) {
-			map = toMap(entityResult);
+			map = toMap(entityResult.getEntity());
 			break;
 		}
 		return map;
@@ -104,8 +95,10 @@ class ApiServicesDatastore implements DataAccessor {
 		RunQueryResponse response = datastore.runQuery(request);
 
 		for (EntityResult entityResult : response.getBatch().getEntityResultList()) {
-			Map<String, String> map = toMap(entityResult);
+			Entity entity = entityResult.getEntity();
+			Map<String, String> map = toMap(entity);
 
+			map.put("id", entity.getKey().getPathElement(0).getName());
 			list.add(map);
 		}
 		return list;

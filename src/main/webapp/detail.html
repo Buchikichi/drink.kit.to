@@ -8,6 +8,10 @@
 <link rel="stylesheet" href="css/default.css"/>
 <script type="text/javascript" defer src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" defer src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript" defer src="js/Environment.js"></script>
+<script type="text/javascript" defer src="js/Language.js"></script>
+<script type="text/javascript" defer src="js/Country.js"></script>
+<script type="text/javascript" defer src="js/Item.js"></script>
 <script type="text/javascript" defer src="js/detail.js"></script>
 </head>
 
@@ -19,25 +23,41 @@
       <a id="editBtn" href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-edit ui-btn-icon-notext ui-btn-right">Edit</a>
     </div>
     <div id="detail" data-role="content">
-      <div class="name ui-bar ui-bar-a ui-corner-all"></div>
-      <div id="image"><img/></div>
-      <form>
-        <input id="imageFile" type="file" name="picture"/>
-      </form>
-      <div class="ui-body ui-body-a ui-corner-all">
-        <span class="attribute"></span>
-      </div>
-      <a href="#tagsPopup" data-rel="popup">test</a>
-      <a href="#bar" data-rel="popup">bar</a>
-      <div class="ui-body ui-body-a ui-corner-all">
-        <span class="comment"></span>
-      </div>
-      <div id="tagsPopup" data-role="popup" class="ui-content">
-        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-        <div>
-        さらに...
+      <form id="detailForm">
+        <div class="name ui-bar ui-bar-a ui-corner-all"></div>
+        <div id="picture"><img/></div>
+        <input id="imageFile" type="file" name="picture" accept="image/*"/>
+        <div class="ui-body ui-body-a ui-corner-all">
+          <span class="attribute"></span>
         </div>
-      </div>
+        <div class="ui-body ui-body-a ui-corner-all">
+          <span class="description"></span>
+        </div>
+        <div id="namePopup" data-role="popup" class="ui-content">
+          <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+          <input type="text" name="name" style="width:30em;"/>
+          <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check" data-rel="back">OK</a>
+        </div>
+        <div id="abvPopup" data-role="popup" class="ui-content">
+          <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+          <input type="number" name="abv" min="0" max="67.5" step=".1" required/>
+          <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check" data-rel="back">OK</a>
+        </div>
+        <div id="descriptionPopup" data-role="popup" class="ui-content">
+          <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+          <label for="description">Description:</label>
+          <textarea id="description" name="description"></textarea>
+          <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check" data-rel="back">OK</a>
+        </div>
+        <button id="commitButton" type="button">OK</button>
+      </form>
+    </div>
+    <div id="countryPanel" data-role="panel" data-position="left" data-position-fixed="true">
+      <div id="countryList" data-role="controlgroup" data-iconpos="right" data-type="radio"></div>
+    </div>
+    <div id="tagsPanel" data-role="panel" data-position="left" data-position-fixed="true">
+      <div class="ui-bar ui-bar-a ui-corner-all">Tags</div>
+      <div id="tagsList" data-role="controlgroup"></div>
     </div>
   </div>
 <script>

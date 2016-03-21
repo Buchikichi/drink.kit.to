@@ -14,7 +14,7 @@ public interface DataAccessor {
 	 * @param rec レコード
 	 * @throws Exception 例外
 	 */
-	void create(TableRecord rec) throws Exception;
+	void save(TableRecord rec) throws Exception;
 
 	Map<String, String> read(TableRecord rec) throws Exception;
 

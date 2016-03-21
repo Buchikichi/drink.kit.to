@@ -18,38 +18,36 @@ import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 
 public class GaDrive extends GaBase {
-	protected static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE);
 	private static final String APP_NAME = "drunker";
+	private static final String FIELDS = "id,name,description,mimeType,thumbnailLink,webContentLink,webViewLink,permissions";
+	protected static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE);
 
 	private Permission createPermission(String fileId) throws IOException {
 		GoogleCredential credential = authorize().createScoped(SCOPES);
 		Drive service = new Drive.Builder(httpTransport, JSON_FACTORY, credential)
 				.setApplicationName(APP_NAME)
 				.build();
-		Permission permission = new Permission()
-				.setRole("reader")
-				.setType("anyone");
-		Permission result = service.permissions()
-				.create(fileId, permission)
-				.execute();
-		return result;
+		Permission permission = new Permission().setRole("reader").setType("anyone");
+
+		return service.permissions().create(fileId, permission).execute();
 	}
 
-	public String create(String name, String type, byte[] bytes) throws IOException {
+	public File create(String name, String description, String type, byte[] bytes) throws IOException {
 		GoogleCredential credential = authorize().createScoped(SCOPES);
 		Drive service = new Drive.Builder(httpTransport, JSON_FACTORY, credential)
 				.setApplicationName(APP_NAME)
 				.build();
-		File file = new File().setName(name);
+		File file = new File().setName(name).setDescription(description);
 		ByteArrayContent mediaContent = new ByteArrayContent(type, bytes);
 		File result = service.files()
 				.create(file, mediaContent)
 				.setIgnoreDefaultVisibility(Boolean.FALSE)
 				.execute();
-		String id = result.getId();
+		String fileId = result.getId();
 
-		createPermission(id);
-		return id;
+		createPermission(fileId);
+//System.out.println(result.toPrettyString());
+		return read(fileId);
 	}
 
 	public File read(String fileId) throws IOException {
@@ -57,13 +55,9 @@ public class GaDrive extends GaBase {
 		Drive service = new Drive.Builder(httpTransport, JSON_FACTORY, credential)
 				.setApplicationName(APP_NAME)
 				.build();
-		String fields = "id,name,mimeType,thumbnailLink,webContentLink,webViewLink";
-		File file = service.files()
-				.get(fileId)
-				.setFields(fields)
-				.execute();
+		File file = service.files().get(fileId).setFields(FIELDS).execute();
 
-//		System.out.println(file.toPrettyString());
+System.out.println(file.toPrettyString());
 		return file;
 	}
 
@@ -72,7 +66,11 @@ public class GaDrive extends GaBase {
 		Drive service = new Drive.Builder(httpTransport, JSON_FACTORY, credential)
 				.setApplicationName(APP_NAME)
 				.build();
-		service.files().delete(fileId).execute();
+		try {
+			service.files().delete(fileId).execute();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String list(String spaces) throws IOException {

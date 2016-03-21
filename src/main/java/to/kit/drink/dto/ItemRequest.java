@@ -1,8 +1,9 @@
 package to.kit.drink.dto;
 
-public class ItemRequest {
+public class ItemRequest extends Item {
 	private String lang;
-	private String id;
+	private String type;
+	private byte[] picture;
 
 	/**
 	 * 言語コードを取得.
@@ -19,17 +20,31 @@ public class ItemRequest {
 		this.lang = lang;
 	}
 	/**
-	 * アイテムIDを取得.
-	 * @return アイテムID
+	 * タイプを取得.
+	 * @return タイプ
 	 */
-	public String getId() {
-		return this.id;
+	public String getType() {
+		return this.type;
 	}
 	/**
-	 * アイテムIDを設定.
-	 * @param id アイテムID
+	 * タイプを設定.
+	 * @param type タイプ
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public void setType(String type) {
+		this.type = type;
+	}
+	/**
+	 * 画像を取得.
+	 * @return 画像
+	 */
+	public byte[] getPicture() {
+		return this.picture;
+	}
+	/**
+	 * 画像を設定.
+	 * @param value 画像
+	 */
+	public void setPicture(byte[] value) {
+		this.picture = value;
 	}
 }

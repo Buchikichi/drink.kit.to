@@ -14,7 +14,7 @@ div.photo img {
 .cell span.name {
 	font-weight: bold;
 }
-.cell .comment {
+.cell .description {
 	font-size: small;
 }
 span.attribute {
@@ -37,24 +37,31 @@ abbr {
 	padding: .2em .6em;
 	border-radius: .25em;
 }
-span.plusButton {
-	background-color: #cccccc;
+a.plusButton {
+	text-decoration: none;
 	margin: 2px;
-	padding: .2em .6em;
+	padding: .2em 1em;
 	border: 1px solid #38c;
 	border-radius: .25em;
 	cursor: pointer;
+}
+a.plusButton:HOVER {
+	background-color: #cccccc;
 }
 
 /*
  * detail.
  */
-#image {
+#picture {
 	text-align: center;
 }
-#image img {
+#picture img {
 	max-width: 100%;
 }
-#detail .comment {
+#detail .description {
 	white-space: pre-wrap;
+}
+#descriptionPopup {
+	width: 800px;
+	max-width: 90%;
 }

@@ -5,16 +5,21 @@ public class Item {
 	private String kindId;
 	private String countryCd;
 	private String text;
+	private String abv;
+	private String fileId;
 	private String imgsrc;
+	private String thumbnail;
 
 	/**
-	 * @return the id
+	 * アイテムIDを取得.
+	 * @return アイテムID
 	 */
 	public String getId() {
 		return this.id;
 	}
 	/**
-	 * @param id the id to set
+	 * アイテムIDを設定.
+	 * @param id アイテムID
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -56,6 +61,30 @@ public class Item {
 		this.text = text;
 	}
 	/**
+	 * @return the abv
+	 */
+	public String getAbv() {
+		return this.abv;
+	}
+	/**
+	 * @param abv the abv to set
+	 */
+	public void setAbv(String abv) {
+		this.abv = abv;
+	}
+	/**
+	 * @return the fileId
+	 */
+	public String getFileId() {
+		return this.fileId;
+	}
+	/**
+	 * @param fileId the fileId to set
+	 */
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
+	}
+	/**
 	 * @return the imgsrc
 	 */
 	public String getImgsrc() {
@@ -66,5 +95,17 @@ public class Item {
 	 */
 	public void setImgsrc(String imgsrc) {
 		this.imgsrc = imgsrc;
+	}
+	/**
+	 * @return the thumbnail
+	 */
+	public String getThumbnail() {
+		return this.thumbnail;
+	}
+	/**
+	 * @param thumbnail the thumbnail to set
+	 */
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 }

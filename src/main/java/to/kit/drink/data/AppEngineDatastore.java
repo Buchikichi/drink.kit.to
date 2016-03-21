@@ -8,7 +8,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 
 class AppEngineDatastore implements DataAccessor {
-	public void create(TableRecord rec) {
+	public void save(TableRecord rec) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity foo = new Entity(rec.getTable());
 

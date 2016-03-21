@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import com.google.api.client.util.Base64;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.api.services.drive.model.File;
 
 import to.kit.drink.data.DataAccessor;
 import to.kit.drink.data.DataAccessorFactory;
@@ -36,9 +35,9 @@ public class PictureController implements Controller<Object> {
 		String type = form.getType();
 		byte[] bytes = form.getPicture();
 		GaDrive drive = new GaDrive();
-		String id = drive.create(name, type, bytes);
+		File file = drive.create(name, name, type, bytes);
 
-		result.setId(id);
+		result.setId(file.getId());
 		return result;
 	}
 
@@ -48,7 +47,7 @@ public class PictureController implements Controller<Object> {
 		DataAccessor da = DataAccessorFactory.getInstance();
 
 		try {
-			da.create(rec);
+			da.save(rec);
 		} catch (Exception e) {
 			e.printStackTrace();
 			uuid = null;

@@ -1,10 +1,15 @@
 package to.kit.drink.controller;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
+
 import com.google.api.services.drive.model.File;
+import com.google.appengine.repackaged.org.apache.commons.codec.digest.DigestUtils;
 
 import to.kit.drink.data.DataAccessor;
 import to.kit.drink.data.DataAccessorFactory;
@@ -19,9 +24,86 @@ import to.kit.sas.control.Controller;
  * @author Hidetaka Sasai
  */
 public class ItemController implements Controller<ItemRequest> {
-	public static final String DEFAULT_LANG = "en";
+	/** デフォルト言語. */
+	public static final String[] DEFAULT_LANG = { "en", "ja" };
 
+	private DataAccessor dao = DataAccessorFactory.getInstance();
 	private GaDrive drive = new GaDrive();
+
+	private Map<String, String> readItem(String id) throws Exception {
+		TableRecord table = new TableRecord("item");
+
+		table.setKey(id);
+		return this.dao.read(table);
+	}
+
+	private Item toItem(Map<String, ?> map) {
+		Item rec = new Item();
+
+		for (String lang : DEFAULT_LANG) {
+			if (map.containsKey(lang)) {
+				String text = (String) map.get(lang);
+
+				if (StringUtils.isNotBlank(text)) {
+					rec.setText(text);
+					break;
+				}
+			}
+		}
+		for (Field field : FieldUtils.getAllFields(Item.class)) {
+			String name = field.getName();
+
+			if (!map.containsKey(name)) {
+				continue;
+			}
+			try {
+				FieldUtils.writeField(field, rec, map.get(name), true);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		return rec;
+	}
+
+	/**
+	 * アイテムを保存.
+	 * @param form フォーム
+	 * @return 保存したアイテム
+	 * @throws Exception 例外
+	 */
+	public Object save(ItemRequest form) throws Exception {
+		TableRecord rec = new TableRecord("item");
+		String lang = form.getLang();
+		String id = form.getId();
+		String text = form.getText();
+		byte[] bytes = form.getPicture();
+
+		if (StringUtils.isBlank(id)) {
+			id = DigestUtils.md5Hex(text);
+		} else {
+			rec.putAll(readItem(id));
+		}
+		if (bytes != null) {
+			String fileId = (String) rec.get("fileId");
+
+			if (StringUtils.isNotBlank(fileId)) {
+				this.drive.delete(fileId);
+			}
+			File file = this.drive.create(id, text, form.getType(), form.getPicture());
+
+			rec.put("fileId", file.getId());
+			rec.put("imgsrc", file.getWebContentLink());
+			rec.put("thumbnail", file.getThumbnailLink());
+		}
+		rec.setKey(id);
+		rec.put("kindId", form.getKindId());
+		rec.put("countryCd", form.getCountryCd());
+		rec.put(lang, text);
+		rec.put("abv", form.getAbv());
+		this.dao.save(rec);
+		rec.put("id", id);
+		return toItem(rec);
+	}
 
 	/**
 	 * イメージを取得.
@@ -59,29 +141,16 @@ this.drive.list("");
 	 * @throws Exception 例外
 	 */
 	public Object read(ItemRequest form) throws Exception {
-		DataAccessor dataAccessor = DataAccessorFactory.getInstance();
 		String lang = form.getLang();
-		TableRecord table = new TableRecord("item");
-
-		table.setKey(form.getId());
-		Map<String, String> map = dataAccessor.read(table);
-
-		Item rec = new Item();
+		String id = form.getId();
+		Map<String, String> map = readItem(id);
+		Item rec = toItem(map);
 		String text = map.get(lang);
-		String imgsrc = map.get("imgsrc");
 
-		rec.setId(map.get("id"));
-		rec.setKindId(map.get("kindId"));
-		rec.setCountryCd(map.get("countryCd"));
-		if (imgsrc != null && !imgsrc.isEmpty()) {
-			File file = this.drive.read(imgsrc);
-
-			rec.setImgsrc(file.getWebContentLink());
+		if (StringUtils.isNotBlank(text)) {
+			rec.setText(text);
 		}
-		if (text == null || text.isEmpty()) {
-			text = map.get(DEFAULT_LANG);
-		}
-		rec.setText(text);
+		rec.setId(id);
 		return rec;
 	}
 
@@ -92,32 +161,17 @@ this.drive.list("");
 	 * @throws Exception 例外
 	 */
 	public Object list(ItemRequest form) throws Exception {
-		DataAccessor dataAccessor = DataAccessorFactory.getInstance();
 		List<Item> list = new ArrayList<>();
 		String lang = form.getLang();
 
-		try {
-			for (Map<String, String> map : dataAccessor.list("item")) {
-				Item rec = new Item();
-				String text = map.get(lang);
-				String imgsrc = map.get("imgsrc");
+		for (Map<String, String> map : this.dao.list("item")) {
+			Item rec = toItem(map);
+			String text = map.get(lang);
 
-				rec.setId(map.get("id"));
-				rec.setKindId(map.get("kindId"));
-				rec.setCountryCd(map.get("countryCd"));
-				if (imgsrc != null && !imgsrc.isEmpty()) {
-					File file = this.drive.read(imgsrc);
-
-					rec.setImgsrc(file.getThumbnailLink());
-				}
-				if (text == null || text.isEmpty()) {
-					text = map.get(DEFAULT_LANG);
-				}
+			if (StringUtils.isNotBlank(text)) {
 				rec.setText(text);
-				list.add(rec);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			list.add(rec);
 		}
 		return list;
 	}
