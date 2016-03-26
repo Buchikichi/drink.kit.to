@@ -2,20 +2,23 @@ $(document).ready(function() {
 	var env = new Environment();
 	var language = new Language(env, '#languageList');
 	var country = new Country('#countryList');
-	var item = new Item(language, country);
+	var tags = new Tags('#tagsList', language);
+	var item = new Item(language, country, tags);
 	var listView = $('#listView');
 	var onLanguageChanged = function() {
-		var keyword = $('input[data-type=search]').val();
+		var lang = language.getCurrentLanguage();
 
 		$('#languageList input').change(function() {
-			console.log('change.');
 			language.load().then(onLanguageChanged);
 		});
-		country.load(language.getCurrentLanguage()).then(function() {
+		country.load(lang).then(function() {
+			var keyword = $('input[data-type=search]').val();
+
 			item.list(listView, keyword).then(function() {
 				env.hideLoading();
 			});
 		});
+		tags.load();
 		env.showLoading();
 	};
 

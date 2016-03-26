@@ -11,6 +11,7 @@
 <script type="text/javascript" defer src="js/Environment.js"></script>
 <script type="text/javascript" defer src="js/Language.js"></script>
 <script type="text/javascript" defer src="js/Country.js"></script>
+<script type="text/javascript" defer src="js/Tags.js"></script>
 <script type="text/javascript" defer src="js/Item.js"></script>
 <script type="text/javascript" defer src="js/index.js"></script>
 </head>
@@ -36,18 +37,6 @@
             <span class="comment">スクールモン修道院で醸造されるトラピストビール。
 フルーティーな香りがある。</span>
           </a>
-        </li>
-        <li>
-           <img src="img/chimay.jpg"/>
-           <h3>
-             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAUCAIAAADp3DFZAAAABmJLR0QA/wD/AP+gvaeTAAAALUlEQVQ4jWNkwAaCvMRWTNPBFP/e9uvP4b+Y4kxYTSEVjJoyasqoKaOmjARTADyKB3dQow4IAAAAAElFTkSuQmCC"/>
-             ジネビア
-           </h3>
-           <div class="attribute">
-             <span class="abv">6.0</span>
-             <span class="tag">エール</span>
-           </div>
-           <p>St.デラセーヌ醸造所で造られる苦味が効いたベルジャンエール</p>
         </li>
 -->
       </ul>
@@ -95,8 +84,14 @@
       </div>
     </div>
     <div id="tagsPanel" data-role="panel" data-position="left" data-position-fixed="true">
-      <div class="ui-bar ui-bar-a ui-corner-all">Tags</div>
-      <div id="tagsList" data-role="controlgroup"></div>
+      <div class="ui-bar ui-bar-b ui-corner-all">Tags</div>
+      <a href="#" data-rel="close" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-check">OK</a>
+      <div id="tagsList" data-role="controlgroup" data-filter="true" data-filter-placeholder=""></div>
+      <div id="tagsPopup" data-role="popup" data-url="/" data-overlay-theme="b">
+        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+        <input type="text" name="tag"/>
+        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check" data-rel="back">OK</a>
+      </div>
     </div>
     <div id="preferencePanel" data-role="panel" data-display="overlay" data-position="right" data-position-fixed="true">
       <div class="ui-bar ui-bar-b ui-corner-all">Language</div>

@@ -1,17 +1,20 @@
-function Item(language, country) {
+function Item(language, country, tags) {
 	this.language = language;
 	this.country = country;
+	this.tags = tags;
 	this.isEdit = false;
 	this.item = {
 		text: 'no name',
 		countryCd: '',
-		abv: '?'
+		abv: '?',
+		tagList: []
 	};
 }
 
 Item.prototype.list = function(listView, keyword) {
 	var lang = this.language.getCurrentLanguage();
 	var country = this.country;
+	var tags = this.tags;
 
 	return $.ajax('/item/list/', {
 		'type': 'POST',
@@ -26,22 +29,17 @@ Item.prototype.list = function(listView, keyword) {
 				var flag = country.getFlag(rec.countryCd);
 				var name = $('<span></span>').addClass('name').append(flag).append(rec.text);
 				var pict = $('<img/>').attr('src', rec.imgsrc);
+				var abv = $('<span></span>').addClass('abv').text(rec.abv);
+				var tagArray = tags.makeTags(rec.tagList);
+				var attribute = $('<span></span>').addClass('attribute').append(abv).append(tagArray);
+				var description = $('<span></span>').addClass('description').text('スクールモン修道院で醸造されるトラピストビール。\nフルーティーな香りがある。');
 				var href = 'detail.html?lang=' + lang + '&id=' + rec.id;
 				var anchor = $('<a></a>').attr('data-ajax', 'false').attr('href', href)
-						.append(pict).append(name);
-				var abv = $('<span></span>').addClass('abv').text(rec.abv);
-				var attribute = $('<span></span>').addClass('attribute').append(abv);
-				var description = $('<span></span>').addClass('description').text('スクールモン修道院で醸造されるトラピストビール。\nフルーティーな香りがある。');
+						.append(pict).append(name).append(attribute);//.append(description);
 
-				['アビー', 'エール', 'トラピスト', 'ベルギービール'].forEach(function(txt) {
-					attribute.append($('<abbr></abbr>').text(txt));
-				});
-				anchor.append(attribute);
-				anchor.append(description);
 				li.attr('data-filtertext', keyword);
 				li.append(anchor);
 				listView.append(li);
-				//li.click(showItem);
 			});
 			listView.filterable('refresh');
 console.log('success: Item.list()');
@@ -111,6 +109,7 @@ Item.prototype.showAttribute = function() {
 	var rec = this.item;
 	var attribute = $('.attribute').empty();
 	var abv = $('<span></span>').addClass('abv').text(rec.abv);
+	var tagArray = this.tags.makeTags(rec.tagList);
 
 	if (this.isEdit) {
 		abv = $('<a></a>').attr('href', '#abvPopup').attr('data-rel', 'popup').append(abv);
@@ -118,10 +117,7 @@ Item.prototype.showAttribute = function() {
 			$('input[name=abv]').val(rec.abv);
 		});
 	}
-	attribute.append(abv);
-	['アビー', 'エール', 'トラピスト', 'ベルギービール'].forEach(function(txt) {
-		attribute.append($('<abbr></abbr>').text(txt));
-	});
+	attribute.append(abv).append(tagArray);
 	if (this.isEdit) {
 		var plusButton = $('<a>+</a>').attr('href', '#tagsPanel').addClass('plusButton');
 
@@ -155,14 +151,21 @@ Item.prototype.setAbv = function(abv) {
 	this.showAttribute();
 };
 
+Item.prototype.setTags = function(tags) {
+	this.item.tagList = tags;
+	this.showAttribute();
+};
+
 Item.prototype.save = function(fd) {
 	var item = this;
 	var rec = this.item;
+	var tagList = new Blob([JSON.stringify(rec.tagList)], { type: 'application/json'});
 
 	fd.append('lang', this.language.getCurrentLanguage());
 	Object.getOwnPropertyNames(rec).forEach(function(key) {
 		fd.append(key, rec[key]);
 	});
+	fd.append('tagList', tagList);
 	return $.ajax('/item/save/', {
 		'type': 'POST',
 		'data': fd,

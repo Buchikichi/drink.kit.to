@@ -1,10 +1,10 @@
 package to.kit.drink.dto;
 
 /**
- * Language.
+ * Country.
  * @author Hidetaka Sasai
  */
-public class Country {
+public class Country implements Multilingual {
 	private String id;
 	private String text;
 	private String flag;

@@ -11,6 +11,7 @@
 <script type="text/javascript" defer src="js/Environment.js"></script>
 <script type="text/javascript" defer src="js/Language.js"></script>
 <script type="text/javascript" defer src="js/Country.js"></script>
+<script type="text/javascript" defer src="js/Tags.js"></script>
 <script type="text/javascript" defer src="js/Item.js"></script>
 <script type="text/javascript" defer src="js/detail.js"></script>
 </head>
@@ -56,8 +57,15 @@
       <div id="countryList" data-role="controlgroup" data-iconpos="right" data-type="radio"></div>
     </div>
     <div id="tagsPanel" data-role="panel" data-position="left" data-position-fixed="true">
-      <div class="ui-bar ui-bar-a ui-corner-all">Tags</div>
-      <div id="tagsList" data-role="controlgroup"></div>
+      <div class="ui-bar ui-bar-b ui-corner-all">Tags</div>
+      <a id="newTagButton" href="#tagsPopup" data-rel="popup" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-plus">New</a>
+      <a id="decideTagsButton" href="#" data-rel="close" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-check">OK</a>
+      <div id="tagsList" data-role="controlgroup" data-filter="true" data-filter-placeholder=""></div>
+      <div id="tagsPopup" data-role="popup" data-url="/" data-overlay-theme="b">
+        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+        <input type="text" name="tag"/>
+        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check" data-rel="back">OK</a>
+      </div>
     </div>
   </div>
 <script>

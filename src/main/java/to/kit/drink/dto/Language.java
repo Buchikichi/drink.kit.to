@@ -4,7 +4,7 @@ package to.kit.drink.dto;
  * Language.
  * @author Hidetaka Sasai
  */
-public class Language {
+public class Language implements Multilingual {
 	private String id;
 	private String text;
 

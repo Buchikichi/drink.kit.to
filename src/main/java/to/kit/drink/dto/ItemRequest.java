@@ -1,5 +1,10 @@
 package to.kit.drink.dto;
 
+/**
+ * アイテムリクエスト.
+ * @author Hidetaka Sasai
+ *
+ */
 public class ItemRequest extends Item {
 	private String lang;
 	private String type;

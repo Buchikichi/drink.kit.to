@@ -1,6 +1,13 @@
 package to.kit.drink.dto;
 
-public class Item {
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * アイテム情報.
+ * @author Hidetaka Sasai
+ */
+public class Item implements Multilingual {
 	private String id;
 	private String kindId;
 	private String countryCd;
@@ -9,6 +16,8 @@ public class Item {
 	private String fileId;
 	private String imgsrc;
 	private String thumbnail;
+	private String tags;
+	private List<String> tagList = new ArrayList<>();
 
 	/**
 	 * アイテムIDを取得.
@@ -107,5 +116,29 @@ public class Item {
 	 */
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+	/**
+	 * @return the tags
+	 */
+	public String getTags() {
+		return this.tags;
+	}
+	/**
+	 * @param tags the tags to set
+	 */
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
+	/**
+	 * @return the tags
+	 */
+	public List<String> getTagList() {
+		return this.tagList;
+	}
+	/**
+	 * @param list the tags to set
+	 */
+	public void setTagList(List<String> list) {
+		this.tagList = list;
 	}
 }

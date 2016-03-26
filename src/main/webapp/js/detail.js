@@ -3,7 +3,8 @@ $(document).ready(function() {
 	var language = new Language(env);
 	var lang = language.getCurrentLanguage();
 	var country = new Country('#countryList');
-	var item = new Item(language, country);
+	var tags = new Tags('#tagsList', language);
+	var item = new Item(language, country, tags);
 	var id = env.params['id'];
 	var editBtn = $('#editBtn');
 
@@ -13,18 +14,18 @@ $(document).ready(function() {
 			item.setCountryCd($(this).val());
 			console.log('country changed.');
 		});
-		if (id) {
-			item.read(id).then(function() {
-				country.select(item.item.countryCd);
-			});
-		} else {
-			item.isEdit = true;
-			item.show();
-		}
-		env.hideLoading();
+		tags.load().then(function() {
+			env.hideLoading();
+			if (id) {
+				item.read(id).then(function() {
+					country.select(item.item.countryCd);
+				});
+			} else {
+				item.isEdit = true;
+				item.show();
+			}
+		});
 	});
-
-//	initControls();
 	$('#namePopup a:last').click(function() {
 		item.setText($('input[name=name]').val());
 	});
@@ -48,32 +49,11 @@ $(document).ready(function() {
 	if (!id) {
 		editBtn.hide();
 	}
+	$('#decideTagsButton').click(function() {
+		item.setTags(tags.listSelected());
+	});
+	$('#tagsPopup a:last').click(function() {
+		tags.save($('input[name=tag]').val());
+	});
 	console.log('ready!!!');
 });
-
-/*
-function initControls() {
-	$('#imageFile').change(function() {
-		var file = this.files[0];
-		var type = file.type;
-
-		if (type.indexOf('image') != 0) {
-			alert('画像を選択してください。');
-			return;
-		}
-//		var form = $('form').get(0);
-//		var fd = new FormData(form);
-//
-//		fd.append('name', file.name);
-//		fd.append('type', type);
-//		$.ajax('/picture/create/', {
-//			'type': 'POST',
-//			'data': fd,
-//			'processData': false,
-//			'contentType': false,
-//		}).then(function(data) {
-//			console.log('uploaded');
-//		});
-	});
-}
-//*/

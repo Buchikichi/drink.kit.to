@@ -17,6 +17,14 @@ div.photo img {
 .cell .description {
 	font-size: small;
 }
+.name {
+	color: #444;
+	text-shadow:1px 1px 3px #666;
+}
+.name > img {
+	box-shadow:0px 0px 3px 1px #aaaaaa;
+	margin-right: .5em;
+}
 span.attribute {
 	display: block;
 	font-size: .75em;
@@ -49,6 +57,9 @@ a.plusButton:HOVER {
 	background-color: #cccccc;
 }
 
+#tagsPopup {
+	width: 17em;
+}
 /*
  * detail.
  */
@@ -57,6 +68,9 @@ a.plusButton:HOVER {
 }
 #picture img {
 	max-width: 100%;
+}
+#imageFile, #commitButton {
+	display: none;
 }
 #detail .description {
 	white-space: pre-wrap;

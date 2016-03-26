@@ -35,8 +35,10 @@ public final class TableRecord extends HashMap<String, Object> {
 	/**
 	 * キーを設定.
 	 * @param val キー
+	 * @return self
 	 */
-	public void setKey(String val) {
+	public TableRecord setKey(String val) {
 		this.key = val;
+		return this;
 	}
 }

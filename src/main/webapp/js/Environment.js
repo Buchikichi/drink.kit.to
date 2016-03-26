@@ -11,6 +11,8 @@ function Environment() {
 	this.loading = false;
 }
 
+Environment.INSTANCE = new Environment();
+
 Environment.prototype.showLoading = function() {
 	this.loading = true;
 	$.mobile.loading('show', {

@@ -1,15 +1,13 @@
 package to.kit.drink.controller;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.google.api.services.drive.model.File;
-import com.google.appengine.repackaged.org.apache.commons.codec.digest.DigestUtils;
 
 import to.kit.drink.data.DataAccessor;
 import to.kit.drink.data.DataAccessorFactory;
@@ -17,52 +15,23 @@ import to.kit.drink.data.TableRecord;
 import to.kit.drink.dto.Item;
 import to.kit.drink.dto.ItemRequest;
 import to.kit.drink.rest.GaDrive;
-import to.kit.sas.control.Controller;
 
 /**
  * アイテムコントローラー.
  * @author Hidetaka Sasai
  */
-public class ItemController implements Controller<ItemRequest> {
-	/** デフォルト言語. */
-	public static final String[] DEFAULT_LANG = { "en", "ja" };
-
+public class ItemController extends BaseController<ItemRequest> {
 	private DataAccessor dao = DataAccessorFactory.getInstance();
 	private GaDrive drive = new GaDrive();
 
-	private Map<String, Object> readItem(String id) throws Exception {
-		TableRecord table = new TableRecord("item");
+	private Item toItem(String lang, Map<String, ?> map) throws Exception {
+		Item item = toBean(map, lang, Item.class);
+		String tags = StringUtils.defaultString(item.getTags());
 
-		table.setKey(id);
-		return this.dao.read(table);
-	}
-
-	private Item toItem(Map<String, ?> map) {
-		Item rec = new Item();
-
-		for (String lang : DEFAULT_LANG) {
-			if (map.containsKey(lang)) {
-				String text = (String) map.get(lang);
-
-				if (StringUtils.isNotBlank(text)) {
-					rec.setText(text);
-					break;
-				}
-			}
+		if (StringUtils.isNotBlank(tags)) {
+			item.setTagList(Arrays.asList(tags.split(",", -1)));
 		}
-		for (Field field : FieldUtils.getAllFields(Item.class)) {
-			String name = field.getName();
-
-			if (!map.containsKey(name)) {
-				continue;
-			}
-			try {
-				FieldUtils.writeField(field, rec, map.get(name), true);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-		return rec;
+		return item;
 	}
 
 	/**
@@ -72,18 +41,14 @@ public class ItemController implements Controller<ItemRequest> {
 	 * @throws Exception 例外
 	 */
 	public Object save(ItemRequest form) throws Exception {
-		TableRecord rec = new TableRecord("item");
 		String lang = form.getLang();
 		String id = form.getId();
 		String text = form.getText();
 		byte[] bytes = form.getPicture();
+		TableRecord rec = new TableRecord("item").setKey(id);
 
-		if (StringUtils.isBlank(id)) {
-			id = DigestUtils.md5Hex(text);
-		} else {
-			rec.putAll(readItem(id));
-		}
-		if (bytes != null) {
+		read(rec);
+		if (bytes != null && 0 < bytes.length) {
 			String fileId = (String) rec.get("fileId");
 
 			if (StringUtils.isNotBlank(fileId)) {
@@ -95,14 +60,14 @@ public class ItemController implements Controller<ItemRequest> {
 			rec.put("imgsrc", file.getWebContentLink());
 			rec.put("thumbnail", file.getThumbnailLink());
 		}
-		rec.setKey(id);
 		rec.put("kindId", form.getKindId());
 		rec.put("countryCd", form.getCountryCd());
 		rec.put(lang, text);
 		rec.put("abv", form.getAbv());
+		rec.put("tags", StringUtils.join(form.getTagList(), ','));
 		this.dao.save(rec);
 		rec.put("id", id);
-		return toItem(rec);
+		return toItem(lang, rec);
 	}
 
 	/**
@@ -135,19 +100,16 @@ public class ItemController implements Controller<ItemRequest> {
 	/**
 	 * アイテムを取得.
 	 * @param form フォーム
-	 * @return アイテム一覧
+	 * @return アイテム
 	 * @throws Exception 例外
 	 */
 	public Object read(ItemRequest form) throws Exception {
 		String lang = form.getLang();
 		String id = form.getId();
-		Map<String, Object> map = readItem(id);
-		Item rec = toItem(map);
-		String text = (String) map.get(lang);
+		TableRecord table = new TableRecord("item").setKey(id);
 
-		if (StringUtils.isNotBlank(text)) {
-			rec.setText(text);
-		}
+		read(table);
+		Item rec = toItem(lang, table);
 		rec.setId(id);
 		return rec;
 	}
@@ -163,12 +125,8 @@ public class ItemController implements Controller<ItemRequest> {
 		String lang = form.getLang();
 
 		for (Map<String, Object> map : this.dao.list("item")) {
-			Item rec = toItem(map);
-			String text = (String) map.get(lang);
+			Item rec = toItem(lang, map);
 
-			if (StringUtils.isNotBlank(text)) {
-				rec.setText(text);
-			}
 			list.add(rec);
 		}
 		return list;

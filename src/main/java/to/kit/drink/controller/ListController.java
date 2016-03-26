@@ -9,15 +9,12 @@ import to.kit.drink.data.DataAccessorFactory;
 import to.kit.drink.dto.Country;
 import to.kit.drink.dto.Language;
 import to.kit.drink.dto.ListRequest;
-import to.kit.sas.control.Controller;
 
 /**
  * 一覧系コントローラー.
  * @author Hidetaka Sasai
  */
-public class ListController implements Controller<ListRequest> {
-	public static final String DEFAULT_LANG = "en";
-
+public class ListController extends BaseController<ListRequest> {
 	private DataAccessor dao = DataAccessorFactory.getInstance();
 
 	/**
@@ -27,19 +24,11 @@ public class ListController implements Controller<ListRequest> {
 	 * @throws Exception 例外
 	 */
 	public Object language(ListRequest form) throws Exception {
-		String lang = form.getLang();
 		List<Language> list = new ArrayList<>();
+		String lang = form.getLang();
 
 		for (Map<String, Object> map : this.dao.list("iso639")) {
-			Language rec = new Language();
-			String text = (String) map.get(lang);
-
-			rec.setId((String) map.get("id"));
-			if (text == null || text.isEmpty()) {
-				text = (String) map.get(DEFAULT_LANG);
-			}
-			rec.setText(text);
-			list.add(rec);
+			list.add(toBean(map, lang, Language.class));
 		}
 		return list;
 	}
@@ -55,16 +44,7 @@ public class ListController implements Controller<ListRequest> {
 		String lang = form.getLang();
 
 		for (Map<String, Object> map : this.dao.list("iso3166")) {
-			Country rec = new Country();
-			String text = (String) map.get(lang);
-
-			rec.setId((String) map.get("id"));
-			rec.setFlag((String) map.get("flag"));
-			if (text == null || text.isEmpty()) {
-				text = (String) map.get(DEFAULT_LANG);
-			}
-			rec.setText(text);
-			list.add(rec);
+			list.add(toBean(map, lang, Country.class));
 		}
 		return list;
 	}
