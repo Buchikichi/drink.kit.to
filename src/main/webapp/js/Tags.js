@@ -66,11 +66,18 @@ console.log('success: Tags.save()');
 	});
 };
 
+Tags.prototype.select = function(tagList) {
+	tagList.forEach(function(tagid) {
+		var input = $('input[value=' + tagid + ']');
+
+		input.prop('checked', true).checkboxradio('refresh');
+	});
+};
+
 Tags.prototype.listSelected = function() {
 	var list = [];
 
 	this.listView.find(':checked').each(function() {
-console.log($(this).val());
 		list.push($(this).val());
 	});
 	return list;

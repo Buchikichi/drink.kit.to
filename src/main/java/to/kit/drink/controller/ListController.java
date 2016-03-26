@@ -6,6 +6,7 @@ import java.util.Map;
 
 import to.kit.drink.data.DataAccessor;
 import to.kit.drink.data.DataAccessorFactory;
+import to.kit.drink.data.TableRecord;
 import to.kit.drink.dto.Country;
 import to.kit.drink.dto.Language;
 import to.kit.drink.dto.ListRequest;
@@ -27,7 +28,7 @@ public class ListController extends BaseController<ListRequest> {
 		List<Language> list = new ArrayList<>();
 		String lang = form.getLang();
 
-		for (Map<String, Object> map : this.dao.list("iso639")) {
+		for (Map<String, Object> map : this.dao.list(new TableRecord("iso639"))) {
 			list.add(toBean(map, lang, Language.class));
 		}
 		return list;
@@ -43,7 +44,7 @@ public class ListController extends BaseController<ListRequest> {
 		List<Country> list = new ArrayList<>();
 		String lang = form.getLang();
 
-		for (Map<String, Object> map : this.dao.list("iso3166")) {
+		for (Map<String, Object> map : this.dao.list(new TableRecord("iso3166"))) {
 			list.add(toBean(map, lang, Country.class));
 		}
 		return list;

@@ -33,6 +33,14 @@ console.log('success: Country.load()');
 	});
 };
 
+Country.prototype.listChecked = function(countryCd) {
+	var list = [];
+	this.listView.find(':checked').each(function() {
+		list.push($(this).val());
+	});
+	return list;
+};
+
 Country.prototype.select = function(countryCd) {
 	var input = $('input[id*=' + countryCd + ']');
 

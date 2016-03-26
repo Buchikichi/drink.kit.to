@@ -1,5 +1,8 @@
 package to.kit.drink.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * アイテムリクエスト.
  * @author Hidetaka Sasai
@@ -7,7 +10,9 @@ package to.kit.drink.dto;
  */
 public class ItemRequest extends Item {
 	private String lang;
+	private List<String> countries = new ArrayList<>();
 	private String type;
+	private String keyword;
 	private byte[] picture;
 
 	/**
@@ -25,6 +30,20 @@ public class ItemRequest extends Item {
 		this.lang = lang;
 	}
 	/**
+	 * 国を取得.
+	 * @return 国
+	 */
+	public List<String> getCountries() {
+		return this.countries;
+	}
+	/**
+	 * 国を設定.
+	 * @param list 国
+	 */
+	public void setCountries(List<String> list) {
+		this.countries = list;
+	}
+	/**
 	 * タイプを取得.
 	 * @return タイプ
 	 */
@@ -37,6 +56,20 @@ public class ItemRequest extends Item {
 	 */
 	public void setType(String type) {
 		this.type = type;
+	}
+	/**
+	 * キーワードを取得.
+	 * @return キーワード
+	 */
+	public String getKeyword() {
+		return this.keyword;
+	}
+	/**
+	 * キーワードを設定.
+	 * @param keyword キーワード
+	 */
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 	/**
 	 * 画像を取得.

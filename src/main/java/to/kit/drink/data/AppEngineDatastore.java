@@ -8,13 +8,14 @@ import java.util.Map;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
 class AppEngineDatastore implements DataAccessor {
-	private DatastoreService dao = DatastoreServiceFactory.getDatastoreService();
+	private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 	@Override
 	public void save(TableRecord rec) {
@@ -24,26 +25,31 @@ class AppEngineDatastore implements DataAccessor {
 		for (Map.Entry<String, Object> entry : rec.entrySet()) {
 			entity.setProperty(entry.getKey(), entry.getValue());
 		}
-		this.dao.put(entity);
+		this.datastore.put(entity);
 	}
 
 	@Override
-	public Map<String, Object> read(TableRecord rec) throws Exception {
+	public Map<String, Object> read(TableRecord rec) {
+		Map<String, Object> map = new HashMap<>();
 		String id = rec.getKey();
 		Key key = KeyFactory.createKey(rec.getTable(), id);
-		Entity entity = this.dao.get(key);
-		Map<String, Object> map = new HashMap<>();
+		try {
+			Entity entity = this.datastore.get(key);
 
-		map.putAll(entity.getProperties());
-		map.put("id", id);
+			map.putAll(entity.getProperties());
+			map.put("id", id);
+		} catch (@SuppressWarnings("unused") EntityNotFoundException e) {
+			// nop
+		}
 		return map;
 	}
 
 	@Override
-	public List<Map<String, Object>> list(String kind) throws Exception {
+	public List<Map<String, Object>> list(TableRecord cond) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();
+		String kind = cond.getTable();
 		Query query = new Query(kind);
-		PreparedQuery pq = this.dao.prepare(query);
+		PreparedQuery pq = this.datastore.prepare(query);
 
 		for (Entity entity : pq.asIterable()) {
 			Map<String, Object> map = new HashMap<>();

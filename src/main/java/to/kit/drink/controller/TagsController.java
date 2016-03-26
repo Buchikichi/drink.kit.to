@@ -29,14 +29,13 @@ public class TagsController extends BaseController<TagsRequest> {
 		String lang = form.getLang();
 		String id = form.getId();
 		String text = form.getText();
-		TableRecord rec = new TableRecord("tags").setKey(id);
+		TableRecord rec = read("tags", id);
 
-		read(rec);
 		rec.put(lang, text);
 		rec.remove("filtertext");
 		rec.put("filtertext", StringUtils.join(rec.values(), ","));
 		this.dao.save(rec);
-		rec.put("id", id);
+		rec.put("id", rec.getKey());
 		return toBean(rec, lang, Tags.class);
 	}
 
@@ -71,7 +70,7 @@ public class TagsController extends BaseController<TagsRequest> {
 		List<Tags> list = new ArrayList<>();
 		String lang = form.getLang();
 
-		for (Map<String, Object> map : this.dao.list("tags")) {
+		for (Map<String, Object> map : this.dao.list(new TableRecord("tags"))) {
 			list.add(toBean(map, lang, Tags.class));
 		}
 		return list;

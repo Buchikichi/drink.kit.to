@@ -27,8 +27,8 @@ public abstract class BaseController<R> implements Controller<R> {
 	/** データアクセス. */
 	private final DataAccessor dao = DataAccessorFactory.getInstance();
 
-	protected void read(TableRecord table) throws Exception {
-		String key = table.getKey();
+	protected TableRecord read(String tableName, String key) throws Exception {
+		TableRecord table = new TableRecord(tableName).setKey(key);
 
 		if (key == null || key.trim().isEmpty()) {
 			String uuid = UUID.randomUUID().toString();
@@ -38,8 +38,11 @@ public abstract class BaseController<R> implements Controller<R> {
 		} else {
 			Map<String, Object> map = this.dao.read(table);
 
-			table.putAll(map);
+			if (map != null) {
+				table.putAll(map);
+			}
 		}
+		return table;
 	}
 
 	protected <T extends Multilingual> T toBean(Map<String, ?> map, String targetLang, Class<T> clazz)

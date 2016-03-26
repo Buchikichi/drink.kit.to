@@ -13,6 +13,7 @@ public class Item implements Multilingual {
 	private String countryCd;
 	private String text;
 	private String abv;
+	private String description;
 	private String fileId;
 	private String imgsrc;
 	private String thumbnail;
@@ -80,6 +81,18 @@ public class Item implements Multilingual {
 	 */
 	public void setAbv(String abv) {
 		this.abv = abv;
+	}
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return this.description;
+	}
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	/**
 	 * @return the fileId

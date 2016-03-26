@@ -26,9 +26,9 @@ public interface DataAccessor {
 
 	/**
 	 * 一覧取得.
-	 * @param kind 種類
+	 * @param cond 条件
 	 * @return 一覧
 	 * @throws Exception 例外
 	 */
-	List<Map<String, Object>> list(String kind) throws Exception;
+	List<Map<String, Object>> list(TableRecord cond) throws Exception;
 }

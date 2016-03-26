@@ -13,6 +13,11 @@ function Environment() {
 
 Environment.INSTANCE = new Environment();
 
+Environment.prototype.showMessage = function(msg) {
+	$('#message p').text(msg);
+	$('#message').popup('open', {positionTo: $(".name")});
+};
+
 Environment.prototype.showLoading = function() {
 	this.loading = true;
 	$.mobile.loading('show', {

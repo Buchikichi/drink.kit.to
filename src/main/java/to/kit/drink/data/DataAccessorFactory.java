@@ -5,14 +5,21 @@ package to.kit.drink.data;
  * @author Hidetaka Sasai
  */
 public final class DataAccessorFactory {
+	private static DataAccessor instance;
+
 	/**
 	 * データアクセスのインスタンスを取得.
 	 * @return データアクセス
 	 */
 	public static DataAccessor getInstance() {
-		if (System.getenv("DATASTORE_SERVICE_ACCOUNT") == null) {
-			return new AppEngineDatastore();
+		if (instance != null) {
+			return instance;
 		}
-		return new ApiServicesDatastore();
+		if (System.getenv("DATASTORE_SERVICE_ACCOUNT") == null) {
+			instance = new AppEngineDatastore();
+		} else {
+			instance = new ApiServicesDatastore();
+		}
+		return instance;
 	}
 }

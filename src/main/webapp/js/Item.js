@@ -7,6 +7,7 @@ function Item(language, country, tags) {
 		text: 'no name',
 		countryCd: '',
 		abv: '?',
+		description: 'no description',
 		tagList: []
 	};
 }
@@ -20,6 +21,7 @@ Item.prototype.list = function(listView, keyword) {
 		'type': 'POST',
 		'data': {
 			'lang': lang,
+			'countries': country.listChecked(),
 			'keyword': keyword
 		},
 		'success': function(data) {
@@ -32,10 +34,10 @@ Item.prototype.list = function(listView, keyword) {
 				var abv = $('<span></span>').addClass('abv').text(rec.abv);
 				var tagArray = tags.makeTags(rec.tagList);
 				var attribute = $('<span></span>').addClass('attribute').append(abv).append(tagArray);
-				var description = $('<span></span>').addClass('description').text('スクールモン修道院で醸造されるトラピストビール。\nフルーティーな香りがある。');
+				var description = $('<span></span>').addClass('description').text(rec.description);
 				var href = 'detail.html?lang=' + lang + '&id=' + rec.id;
 				var anchor = $('<a></a>').attr('data-ajax', 'false').attr('href', href)
-						.append(pict).append(name).append(attribute);//.append(description);
+						.append(pict).append(name).append(attribute).append(description);
 
 				li.attr('data-filtertext', keyword);
 				li.append(anchor);
@@ -50,6 +52,8 @@ console.log('success: Item.list()');
 Item.prototype.read = function(id) {
 	var item = this;
 	var lang = this.language.getCurrentLanguage();
+	var country = this.country;
+	var tags = this.tags;
 
 	return $.ajax('/item/read/', {
 		'type': 'POST',
@@ -60,6 +64,8 @@ Item.prototype.read = function(id) {
 		'success': function(rec) {
 			item.item = rec;
 			item.show();
+			country.select(rec.countryCd);
+			tags.select(rec.tagList);
 		}
 	});
 };
@@ -127,8 +133,11 @@ Item.prototype.showAttribute = function() {
 
 Item.prototype.showDescription = function() {
 	var rec = this.item;
-	var description = 'スクールモン修道院で醸造されるトラピストビール。\nフルーティーな香りがある。';
+	var description = rec.description;
 
+	if (!description) {
+		description = 'no description';
+	}
 	$('textarea[name=description]').text(description);
 	if (this.isEdit) {
 		description = $('<a href="#descriptionPopup"></a>').attr('data-rel', 'popup').text(description);
@@ -154,6 +163,11 @@ Item.prototype.setAbv = function(abv) {
 Item.prototype.setTags = function(tags) {
 	this.item.tagList = tags;
 	this.showAttribute();
+};
+
+Item.prototype.setDescription = function(description) {
+	this.item.description = description;
+	this.showDescription();
 };
 
 Item.prototype.save = function(fd) {

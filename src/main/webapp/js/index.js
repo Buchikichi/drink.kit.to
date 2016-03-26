@@ -4,6 +4,7 @@ $(document).ready(function() {
 	var country = new Country('#countryList');
 	var tags = new Tags('#tagsList', language);
 	var item = new Item(language, country, tags);
+	var keyword = $('input[data-type=search]');
 	var listView = $('#listView');
 	var onLanguageChanged = function() {
 		var lang = language.getCurrentLanguage();
@@ -12,9 +13,10 @@ $(document).ready(function() {
 			language.load().then(onLanguageChanged);
 		});
 		country.load(lang).then(function() {
-			var keyword = $('input[data-type=search]').val();
-
-			item.list(listView, keyword).then(function() {
+			$('#countryList :checkbox').change(function() {
+				keyword.change();
+			});
+			item.list(listView, keyword.val()).then(function() {
 				env.hideLoading();
 			});
 		});
@@ -24,10 +26,8 @@ $(document).ready(function() {
 
 	language.load().then(onLanguageChanged);
 	listView.on('filterablebeforefilter', function(e, data) {
-		var keyword = data.input.val().trim();
-
 		env.showLoading();
-		item.list(listView, keyword).then(function() {
+		item.list(listView, data.input.val().trim()).then(function() {
 			env.hideLoading();
 		});
 	});

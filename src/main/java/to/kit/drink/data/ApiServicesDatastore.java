@@ -25,10 +25,19 @@ import com.google.api.services.datastore.client.DatastoreHelper;
 import com.google.protobuf.ByteString;
 
 class ApiServicesDatastore implements DataAccessor {
+	private Datastore datastore;
+
+	ApiServicesDatastore() {
+		try {
+			this.datastore = DatastoreHelper.getDatastoreFromEnv();
+		} catch (GeneralSecurityException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void save(TableRecord rec) throws GeneralSecurityException, DatastoreException, IOException {
-		Datastore datastore = DatastoreHelper.getDatastoreFromEnv();
 		BeginTransactionRequest.Builder treq = BeginTransactionRequest.newBuilder();
-		BeginTransactionResponse tres = datastore.beginTransaction(treq.build());
+		BeginTransactionResponse tres = this.datastore.beginTransaction(treq.build());
 		ByteString tx = tres.getTransaction();
 		CommitRequest.Builder creq = CommitRequest.newBuilder().setTransaction(tx);
 		PartitionId partitionId = PartitionId.newBuilder().build();
@@ -53,7 +62,7 @@ class ApiServicesDatastore implements DataAccessor {
 		Entity entity = entityBuilder.build();
 
 		creq.getMutationBuilder().addUpsert(entity);
-		datastore.commit(creq.build());
+		this.datastore.commit(creq.build());
 	}
 
 	private Map<String, Object> toMap(Entity entity) {
@@ -74,10 +83,9 @@ class ApiServicesDatastore implements DataAccessor {
 		String kind = rec.getTable();
 		String whereClause = "__key__ = Key(" + kind + ", '" + rec.getKey() + "') ";
 		String queryString = "SELECT * FROM " + kind + " WHERE " + whereClause;
-		Datastore datastore = DatastoreHelper.getDatastoreFromEnv();
 		GqlQuery.Builder query = GqlQuery.newBuilder().setAllowLiteral(true).setQueryString(queryString);
 		RunQueryRequest request = RunQueryRequest.newBuilder().setGqlQuery(query).build();
-		RunQueryResponse response = datastore.runQuery(request);
+		RunQueryResponse response = this.datastore.runQuery(request);
 
 		for (EntityResult entityResult : response.getBatch().getEntityResultList()) {
 			map = toMap(entityResult.getEntity());
@@ -87,12 +95,12 @@ class ApiServicesDatastore implements DataAccessor {
 	}
 
 	@Override
-	public List<Map<String, Object>> list(String kind) throws GeneralSecurityException, IOException, DatastoreException {
+	public List<Map<String, Object>> list(TableRecord cond) throws GeneralSecurityException, IOException, DatastoreException {
 		List<Map<String, Object>> list = new ArrayList<>();
-		Datastore datastore = DatastoreHelper.getDatastoreFromEnv();
+		String kind = cond.getTable();
 		GqlQuery.Builder query = GqlQuery.newBuilder().setQueryString("SELECT * FROM " + kind);
 		RunQueryRequest request = RunQueryRequest.newBuilder().setGqlQuery(query).build();
-		RunQueryResponse response = datastore.runQuery(request);
+		RunQueryResponse response = this.datastore.runQuery(request);
 
 		for (EntityResult entityResult : response.getBatch().getEntityResultList()) {
 			Entity entity = entityResult.getEntity();

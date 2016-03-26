@@ -63,14 +63,14 @@ a.plusButton:HOVER {
 /*
  * detail.
  */
+#detail {
+	display: none;
+}
 #picture {
 	text-align: center;
 }
 #picture img {
 	max-width: 100%;
-}
-#imageFile, #commitButton {
-	display: none;
 }
 #detail .description {
 	white-space: pre-wrap;
