@@ -19,6 +19,7 @@ import to.kit.drink.dto.Item;
 import to.kit.drink.dto.ItemRequest;
 import to.kit.drink.rest.GaDrive;
 import to.kit.util.NameUtils;
+import to.kit.util.RomanConverter;
 
 /**
  * アイテムコントローラー.
@@ -30,6 +31,7 @@ public class ItemController extends BaseController<ItemRequest> {
 	private static final int MAX_DESCRIPTION_LENGTH = 200;
 	private DataAccessor dao = DataAccessorFactory.getInstance();
 	private GaDrive drive = new GaDrive();
+	private RomanConverter romanConverter = RomanConverter.getInstance();
 
 	private Item toItem(String lang, Map<String, ?> map) throws Exception {
 		Item item = toBean(map, lang, Item.class);
@@ -56,8 +58,7 @@ public class ItemController extends BaseController<ItemRequest> {
 				String word = String.valueOf(entry.getValue());
 
 				wordSet.add(NameUtils.toKatakana(word));
-				wordSet.add(NameUtils.toHiragana(word));
-				wordSet.add(word);
+				wordSet.add(word.toLowerCase());
 			}
 		}
 		return StringUtils.join(wordSet, "\t");
@@ -154,6 +155,19 @@ public class ItemController extends BaseController<ItemRequest> {
 		return rec;
 	}
 
+	private String[] makeKeywords(final String keyword) {
+		Set<String> set = new HashSet<>();
+
+		if (StringUtils.isNotBlank(keyword)) {
+			for (String word : keyword.split("[\\s,]")) {
+				set.add(this.romanConverter.convert(word));
+				set.add(NameUtils.toKatakana(word));
+				set.add(word);
+			}
+		}
+		return set.toArray(new String[set.size()]);
+	}
+
 	/**
 	 * アイテム一覧を取得.
 	 * @param form フォーム
@@ -164,11 +178,24 @@ public class ItemController extends BaseController<ItemRequest> {
 		List<Item> list = new ArrayList<>();
 		String lang = form.getLang();
 		List<String> countries = form.getCountries();
+		String[] keywords = makeKeywords(form.getKeyword());
 
 		for (Map<String, Object> map : this.dao.list(new TableRecord("item"))) {
 			Item rec = toItem(lang, map);
 
 			if (!countries.isEmpty() && !countries.contains(rec.getCountryCd())) {
+				continue;
+			}
+			String filtertext = StringUtils.defaultString(rec.getFiltertext());
+			boolean isMatch = keywords.length == 0;
+
+			for (String word : keywords) {
+				if (filtertext.contains(word)) {
+					isMatch = true;
+					break;
+				}
+			}
+			if (!isMatch) {
 				continue;
 			}
 			list.add(rec);

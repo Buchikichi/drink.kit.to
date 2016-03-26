@@ -14,6 +14,7 @@ public class Item implements Multilingual {
 	private String text;
 	private String abv;
 	private String description;
+	private String filtertext;
 	private String fileId;
 	private String imgsrc;
 	private String thumbnail;
@@ -93,6 +94,18 @@ public class Item implements Multilingual {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	/**
+	 * @return the filtertext
+	 */
+	public String getFiltertext() {
+		return this.filtertext;
+	}
+	/**
+	 * @param filtertext the filtertext to set
+	 */
+	public void setFiltertext(String filtertext) {
+		this.filtertext = filtertext;
 	}
 	/**
 	 * @return the fileId
