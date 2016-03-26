@@ -1,6 +1,8 @@
 package to.kit.drink.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * テーブルレコードを管理.
@@ -9,6 +11,7 @@ import java.util.HashMap;
 public final class TableRecord extends HashMap<String, Object> {
 	private final String table;
 	private String key;
+	private final List<String> sort = new ArrayList<>();
 
 	/**
 	 * インスタンス生成.
@@ -16,6 +19,16 @@ public final class TableRecord extends HashMap<String, Object> {
 	 */
 	public TableRecord(String tableName) {
 		this.table = tableName;
+	}
+
+	/**
+	 * ソート順を追加.
+	 * @param fieldName フィールド名
+	 * @return self
+	 */
+	public TableRecord addSort(String fieldName) {
+		this.sort.add(fieldName);
+		return this;
 	}
 
 	/**
@@ -40,5 +53,13 @@ public final class TableRecord extends HashMap<String, Object> {
 	public TableRecord setKey(String val) {
 		this.key = val;
 		return this;
+	}
+
+	/**
+	 * ソート順を取得.
+	 * @return ソート順
+	 */
+	public List<String> getSort() {
+		return this.sort;
 	}
 }

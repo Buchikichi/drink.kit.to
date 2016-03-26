@@ -28,7 +28,7 @@ public class ListController extends BaseController<ListRequest> {
 		List<Language> list = new ArrayList<>();
 		String lang = form.getLang();
 
-		for (Map<String, Object> map : this.dao.list(new TableRecord("iso639"))) {
+		for (Map<String, Object> map : this.dao.list(new TableRecord("iso639").addSort("en"))) {
 			list.add(toBean(map, lang, Language.class));
 		}
 		return list;
@@ -44,7 +44,7 @@ public class ListController extends BaseController<ListRequest> {
 		List<Country> list = new ArrayList<>();
 		String lang = form.getLang();
 
-		for (Map<String, Object> map : this.dao.list(new TableRecord("iso3166"))) {
+		for (Map<String, Object> map : this.dao.list(new TableRecord("iso3166").addSort("en"))) {
 			list.add(toBean(map, lang, Country.class));
 		}
 		return list;

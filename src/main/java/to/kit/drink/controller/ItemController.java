@@ -160,7 +160,7 @@ public class ItemController extends BaseController<ItemRequest> {
 
 		if (StringUtils.isNotBlank(keyword)) {
 			for (String word : keyword.split("[\\s,]")) {
-				set.add(this.romanConverter.convert(word));
+				set.add(NameUtils.toKatakana(this.romanConverter.convert(word)));
 				set.add(NameUtils.toKatakana(word));
 				set.add(word);
 			}
@@ -180,7 +180,7 @@ public class ItemController extends BaseController<ItemRequest> {
 		List<String> countries = form.getCountries();
 		String[] keywords = makeKeywords(form.getKeyword());
 
-		for (Map<String, Object> map : this.dao.list(new TableRecord("item"))) {
+		for (Map<String, Object> map : this.dao.list(new TableRecord("item").addSort("en"))) {
 			Item rec = toItem(lang, map);
 
 			if (!countries.isEmpty() && !countries.contains(rec.getCountryCd())) {

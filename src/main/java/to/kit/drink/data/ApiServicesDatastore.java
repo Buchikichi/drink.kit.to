@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.api.services.datastore.DatastoreV1.BeginTransactionRequest;
 import com.google.api.services.datastore.DatastoreV1.BeginTransactionResponse;
 import com.google.api.services.datastore.DatastoreV1.CommitRequest;
@@ -77,6 +79,17 @@ class ApiServicesDatastore implements DataAccessor {
 		return map;
 	}
 
+	private String makeOrder(TableRecord cond) {
+		StringBuilder buff = new StringBuilder();
+		List<String> sort = cond.getSort();
+
+		if (!sort.isEmpty()) {
+			buff.append(" ORDER BY ");
+			buff.append(StringUtils.join(sort, ","));
+		}
+		return buff.toString();
+	}
+
 	@Override
 	public Map<String, Object> read(TableRecord rec) throws Exception {
 		Map<String, Object> map = null;
@@ -98,7 +111,8 @@ class ApiServicesDatastore implements DataAccessor {
 	public List<Map<String, Object>> list(TableRecord cond) throws GeneralSecurityException, IOException, DatastoreException {
 		List<Map<String, Object>> list = new ArrayList<>();
 		String kind = cond.getTable();
-		GqlQuery.Builder query = GqlQuery.newBuilder().setQueryString("SELECT * FROM " + kind);
+		String order = makeOrder(cond);
+		GqlQuery.Builder query = GqlQuery.newBuilder().setQueryString("SELECT * FROM " + kind + order);
 		RunQueryRequest request = RunQueryRequest.newBuilder().setGqlQuery(query).build();
 		RunQueryResponse response = this.datastore.runQuery(request);
 

@@ -47,8 +47,10 @@ class AppEngineDatastore implements DataAccessor {
 	@Override
 	public List<Map<String, Object>> list(TableRecord cond) throws Exception {
 		List<Map<String, Object>> list = new ArrayList<>();
-		String kind = cond.getTable();
-		Query query = new Query(kind);
+		Query query = new Query(cond.getTable());
+		for (String sort : cond.getSort()) {
+			query.addSort(sort);
+		}
 		PreparedQuery pq = this.datastore.prepare(query);
 
 		for (Entity entity : pq.asIterable()) {

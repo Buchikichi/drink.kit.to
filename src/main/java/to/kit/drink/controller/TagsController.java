@@ -70,7 +70,7 @@ public class TagsController extends BaseController<TagsRequest> {
 		List<Tags> list = new ArrayList<>();
 		String lang = form.getLang();
 
-		for (Map<String, Object> map : this.dao.list(new TableRecord("tags"))) {
+		for (Map<String, Object> map : this.dao.list(new TableRecord("tags").addSort("en"))) {
 			list.add(toBean(map, lang, Tags.class));
 		}
 		return list;
