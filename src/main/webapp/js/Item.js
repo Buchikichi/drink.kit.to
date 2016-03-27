@@ -13,18 +13,22 @@ function Item(language, country, tags) {
 }
 
 Item.prototype.list = function(listView, keyword) {
+	var env = Environment.INSTANCE;
 	var lang = this.language.getCurrentLanguage();
 	var country = this.country;
 	var tags = this.tags;
 
+	env.showLoading();
 	return $.ajax('/item/list/', {
 		'type': 'POST',
 		'data': {
 			'lang': lang,
 			'countries': country.listChecked(),
+			'tagList': tags.listChecked(),
 			'keyword': keyword
 		},
 		'success': function(data) {
+console.log('Item.list(): success.');
 			listView.empty();
 			data.forEach(function(rec) {
 				var li = $('<li></li>').attr('class', 'cell').attr('data-id', rec.id);
@@ -44,7 +48,8 @@ Item.prototype.list = function(listView, keyword) {
 				listView.append(li);
 			});
 			listView.filterable('refresh');
-console.log('success: Item.list()');
+			env.hideLoading();
+console.log('Item.list(): end.');
 		}
 	});
 };
@@ -146,7 +151,7 @@ Item.prototype.showDescription = function() {
 };
 
 Item.prototype.setText = function(text) {
-	this.item.text = text;
+	this.item.text = text.trim();
 	this.showName();
 };
 
@@ -166,7 +171,7 @@ Item.prototype.setTags = function(tags) {
 };
 
 Item.prototype.setDescription = function(description) {
-	this.item.description = description;
+	this.item.description = description.trim();
 	this.showDescription();
 };
 

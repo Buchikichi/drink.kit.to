@@ -2,6 +2,7 @@ function Tags(listId, language) {
 	this.listView = $(listId);
 	this.language = language;
 	this.id = null;
+	this.checkedList = [];
 }
 
 Tags.prototype.load = function() {
@@ -40,6 +41,15 @@ console.log('success: Tags.load()');
 	});
 };
 
+Tags.prototype.atOpen = function() {
+	this.uncheckAll();
+	this.select(this.checkedList);
+};
+
+Tags.prototype.atCommit = function() {
+	this.checkedList = this.listChecked();
+};
+
 Tags.prototype.save = function(tag) {
 	var env = Environment.INSTANCE;
 	var tags = this;
@@ -74,7 +84,13 @@ Tags.prototype.select = function(tagList) {
 	});
 };
 
-Tags.prototype.listSelected = function() {
+Tags.prototype.uncheckAll = function() {
+	this.listView.find(':checked').each(function() {
+		$(this).removeAttr('checked').checkboxradio('refresh');
+	});
+};
+
+Tags.prototype.listChecked = function() {
 	var list = [];
 
 	this.listView.find(':checked').each(function() {

@@ -36,7 +36,7 @@
         </div>
         <div id="namePopup" data-role="popup" class="ui-content">
           <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-          <input type="text" name="name" style="width:30em;"/>
+          <input type="text" name="name" style="width:30em;" required/>
           <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check" data-rel="back">OK</a>
         </div>
         <div id="abvPopup" data-role="popup" class="ui-content">
@@ -47,7 +47,7 @@
         <div id="descriptionPopup" data-role="popup" class="ui-content">
           <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
           <label for="description">Description:</label>
-          <textarea id="description" name="description"></textarea>
+          <textarea id="description" name="description" required></textarea>
           <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check" data-rel="back">OK</a>
         </div>
         <button id="commitButton" type="button">OK</button>
@@ -67,7 +67,10 @@
         <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-a ui-btn-icon-left ui-icon-check" data-rel="back">OK</a>
       </div>
     </div>
-    <div id="message" data-role="popup" data-arrow="t" class="ui-content"><p></p></div>
+    <div id="message" data-role="popup" data-arrow="t" class="ui-content">
+      <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+      <p></p>
+    </div>
   </div>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

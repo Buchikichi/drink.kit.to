@@ -61,7 +61,7 @@ $(document).ready(function() {
 		editBtn.hide();
 	}
 	$('#decideTagsButton').click(function() {
-		item.setTags(tags.listSelected());
+		item.setTags(tags.listChecked());
 	});
 	$('#tagsPopup a:last').click(function() {
 		tags.save($('input[name=tag]').val());

@@ -26,7 +26,7 @@ import to.kit.util.RomanConverter;
  * @author Hidetaka Sasai
  */
 public class ItemController extends BaseController<ItemRequest> {
-	private static final List<String> EXCLUDE_FIELDS = Arrays.asList(new String[] {"id", "fileId", "filtertext", "imgsrc", "kindId", "tags", "thumbnail"});
+	private static final List<String> EXCLUDE_FIELDS = Arrays.asList(new String[] {"abv", "id", "fileId", "filtertext", "imgsrc", "kindId", "tags", "thumbnail"});
 	private static final int MAX_NAME_LENGTH = 100;
 	private static final int MAX_DESCRIPTION_LENGTH = 200;
 	private DataAccessor dao = DataAccessorFactory.getInstance();
@@ -42,8 +42,12 @@ public class ItemController extends BaseController<ItemRequest> {
 		}
 		TableRecord descriptionTable = read("description", item.getId());
 		Description description = toBean(descriptionTable, lang, Description.class);
+		String text = StringUtils.defaultString(description.getText());
 
-		item.setDescription(description.getText());
+		if ("null".equals(text)) {
+			text = "";
+		}
+		item.setDescription(text);
 		return item;
 	}
 
@@ -91,15 +95,22 @@ public class ItemController extends BaseController<ItemRequest> {
 		String text = StringUtils.left(form.getText(), MAX_NAME_LENGTH);
 		byte[] bytes = form.getPicture();
 		String descriptionText = StringUtils.left(form.getDescription(), MAX_DESCRIPTION_LENGTH);
+		boolean isNew = StringUtils.isBlank(id);
 		TableRecord item = read("item", id);
 		TableRecord description = read("description", id);
 
+		if (isNew) {
+			for (String key : DEFAULT_LANG) {
+				item.put(key, text);
+			}
+		} else {
+			item.put(lang, text);
+		}
 		if (bytes != null && 0 < bytes.length) {
 			saveImage(item, form);
 		}
 		item.put("kindId", form.getKindId());
 		item.put("countryCd", form.getCountryCd());
-		item.put(lang, text);
 		item.put("abv", form.getAbv());
 		item.put("tags", StringUtils.join(form.getTagList(), ','));
 		description.put(lang, descriptionText);
@@ -160,7 +171,11 @@ public class ItemController extends BaseController<ItemRequest> {
 
 		if (StringUtils.isNotBlank(keyword)) {
 			for (String word : keyword.split("[\\s,]")) {
-				set.add(NameUtils.toKatakana(this.romanConverter.convert(word)));
+				String kana = this.romanConverter.convert(word);
+
+				if (StringUtils.isNotBlank(kana)) {
+					set.add(NameUtils.toKatakana(kana));
+				}
 				set.add(NameUtils.toKatakana(word));
 				set.add(word);
 			}
@@ -178,13 +193,29 @@ public class ItemController extends BaseController<ItemRequest> {
 		List<Item> list = new ArrayList<>();
 		String lang = form.getLang();
 		List<String> countries = form.getCountries();
+		List<String> tagList = form.getTagList();
 		String[] keywords = makeKeywords(form.getKeyword());
 
+//System.out.println("Item.list: begin.");
 		for (Map<String, Object> map : this.dao.list(new TableRecord("item").addSort("en"))) {
+//System.out.print("*filter*");
 			Item rec = toItem(lang, map);
 
 			if (!countries.isEmpty() && !countries.contains(rec.getCountryCd())) {
 				continue;
+			}
+			if (!tagList.isEmpty()) {
+				boolean isMatch = false;
+
+				for (String tagId : tagList) {
+					if (rec.getTags().contains(tagId)) {
+						isMatch = true;
+						break;
+					}
+				}
+				if (!isMatch) {
+					continue;
+				}
 			}
 			String filtertext = StringUtils.defaultString(rec.getFiltertext());
 			boolean isMatch = keywords.length == 0;
@@ -200,6 +231,7 @@ public class ItemController extends BaseController<ItemRequest> {
 			}
 			list.add(rec);
 		}
+//System.out.println("Item.list: end.");
 		return list;
 	}
 

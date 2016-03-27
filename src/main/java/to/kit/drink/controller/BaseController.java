@@ -22,7 +22,7 @@ import to.kit.sas.control.Controller;
  */
 public abstract class BaseController<R> implements Controller<R> {
 	/** デフォルト言語. */
-	protected static final String[] DEFAULT_LANG = { "en", "ja" };
+	protected static final String[] DEFAULT_LANG = { "en", "ja", "de" };
 
 	/** データアクセス. */
 	private final DataAccessor dao = DataAccessorFactory.getInstance();

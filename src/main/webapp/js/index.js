@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var env = new Environment();
+	var env = Environment.INSTANCE;
 	var language = new Language(env, '#languageList');
 	var country = new Country('#countryList');
 	var tags = new Tags('#tagsList', language);
@@ -9,6 +9,7 @@ $(document).ready(function() {
 	var onLanguageChanged = function() {
 		var lang = language.getCurrentLanguage();
 
+		$('#createButton').attr('href', 'detail.html?lang=' + lang);
 		$('#languageList input').change(function() {
 			language.load().then(onLanguageChanged);
 		});
@@ -16,20 +17,22 @@ $(document).ready(function() {
 			$('#countryList :checkbox').change(function() {
 				keyword.change();
 			});
-			item.list(listView, keyword.val()).then(function() {
-				env.hideLoading();
+			tags.load().then(function() {
+				keyword.change();
 			});
 		});
-		tags.load();
-		env.showLoading();
 	};
 
 	language.load().then(onLanguageChanged);
 	listView.on('filterablebeforefilter', function(e, data) {
-		env.showLoading();
-		item.list(listView, data.input.val().trim()).then(function() {
-			env.hideLoading();
-		});
+		item.list(listView, data.input.val().trim());
+	});
+	$('a[href="#tagsPanel"]').click(function() {
+		tags.atOpen();
+	});
+	$('#commitTagsButton').click(function() {
+		tags.atCommit();
+		keyword.change();
 	});
 });
 /*
