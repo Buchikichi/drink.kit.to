@@ -5,8 +5,9 @@ $(document).ready(function() {
 	var country = new Country('#countryList');
 	var tags = new Tags('#tagsList', language);
 	var item = new Item(language, country, tags);
+	var account = new Account();
 	var id = env.params['id'];
-	var editBtn = $('#editBtn');
+	var editBtn = $('#editBtn').hide();
 
 	env.showLoading();
 	country.load(lang).then(function() {
@@ -57,9 +58,11 @@ $(document).ready(function() {
 		item.isEdit = !item.isEdit;
 		item.show();
 	});
-	if (!id) {
-		editBtn.hide();
-	}
+	account.getUser().then(function() {
+		if (id && account.user) {
+			editBtn.show();
+		}
+	});
 	$('#decideTagsButton').click(function() {
 		item.setTags(tags.listChecked());
 	});

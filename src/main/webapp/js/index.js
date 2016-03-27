@@ -9,7 +9,7 @@ $(document).ready(function() {
 	var onLanguageChanged = function() {
 		var lang = language.getCurrentLanguage();
 
-		$('#createButton').attr('href', 'detail.html?lang=' + lang);
+		$('#createButton').attr('href', '/item/create?lang=' + lang);
 		$('#languageList input').change(function() {
 			language.load().then(onLanguageChanged);
 		});
@@ -35,21 +35,3 @@ $(document).ready(function() {
 		keyword.change();
 	});
 });
-/*
-function showItem() {
-	var li = $(this);
-	var id = li.attr('data-id');
-	var name = li.find('.name').clone();
-	var attributes = li.find('.attribute *').clone();
-	var plusButton = $('<span>+</span>').addClass('plusButton');
-	var comment = li.find('.comment').text();
-
-	$('#detailPopup .name').empty().append(name);
-	$('#detailPopup .attribute').empty().append(attributes).append(plusButton);
-	$('#detailPopup .comment').text(comment);
-	name.dblclick(function() {
-		console.log('dbl');
-	});
-	console.log('ID:' + id);
-}
-//*/

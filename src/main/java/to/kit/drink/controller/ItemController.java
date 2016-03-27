@@ -1,15 +1,22 @@
 package to.kit.drink.controller;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import com.google.api.services.drive.model.File;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 import to.kit.drink.data.DataAccessor;
 import to.kit.drink.data.DataAccessorFactory;
@@ -20,18 +27,33 @@ import to.kit.drink.dto.ItemRequest;
 import to.kit.drink.rest.GaDrive;
 import to.kit.util.NameUtils;
 import to.kit.util.RomanConverter;
+import to.kit.util.SysEnv;
 
 /**
  * アイテムコントローラー.
  * @author Hidetaka Sasai
  */
 public class ItemController extends BaseController<ItemRequest> {
-	private static final List<String> EXCLUDE_FIELDS = Arrays.asList(new String[] {"abv", "id", "fileId", "filtertext", "imgsrc", "kindId", "tags", "thumbnail"});
+	private static final List<String> EXCLUDE_FIELDS =
+			Arrays.asList(new String[] {"abv", "id", "fileId", "filtertext", "imgsrc", "kindId", "tags", "thumbnail", "updated", "user"});
 	private static final int MAX_NAME_LENGTH = 100;
 	private static final int MAX_DESCRIPTION_LENGTH = 200;
 	private DataAccessor dao = DataAccessorFactory.getInstance();
 	private GaDrive drive = new GaDrive();
 	private RomanConverter romanConverter = RomanConverter.getInstance();
+
+	/**
+	 * ユーザー情報取得.
+	 * @return ユーザー情報
+	 */
+	private User getUser() {
+		if (!SysEnv.isLocal()) {
+			UserService service = UserServiceFactory.getUserService();
+
+			return service.getCurrentUser();
+		}
+		return new User("ぶちきち", "");
+	}
 
 	private Item toItem(String lang, Map<String, ?> map) throws Exception {
 		Item item = toBean(map, lang, Item.class);
@@ -115,6 +137,8 @@ public class ItemController extends BaseController<ItemRequest> {
 		item.put("tags", StringUtils.join(form.getTagList(), ','));
 		description.put(lang, descriptionText);
 		item.put("filtertext", makeFilter(item, description));
+		item.put("user", getUser().getEmail());
+		item.put("updated", DateFormatUtils.ISO_DATETIME_FORMAT.format(new Date()));
 		this.dao.save(item);
 		this.dao.save(description);
 		item.put("id", item.getKey());
@@ -233,6 +257,23 @@ public class ItemController extends BaseController<ItemRequest> {
 		}
 //System.out.println("Item.list: end.");
 		return list;
+	}
+
+	/**
+	 * 新規作成画面へ.
+	 * @param form
+	 * @return 転送先画面
+	 * @throws Exception 例外
+	 */
+	public Object create(ItemRequest form) throws Exception {
+		User user = getUser();
+
+		if (user == null) {
+			UserService service = UserServiceFactory.getUserService();
+
+			return new URL(service.createLoginURL("/item/create"));
+		}
+		return new URI("/detail.html?lang=" + form.getLang());
 	}
 
 	@Override
