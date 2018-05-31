@@ -59,7 +59,7 @@ $(document).ready(function() {
 		item.show();
 	});
 	account.getUser().then(function() {
-		if (id && account.user) {
+		if (id && account.user.email) {
 			editBtn.show();
 		}
 	});

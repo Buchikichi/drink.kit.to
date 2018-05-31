@@ -5,6 +5,10 @@ div.photo {
 div.photo img {
 	border-radius: 4px;
 }
+#tagsPanel div.ui-bar {
+	color: white;
+	background-color: #38c;
+}
 /*
  * cell.
  */
@@ -18,7 +22,7 @@ div.photo img {
 	font-size: small;
 }
 .name {
-	color: #444;
+	color: #333;
 	text-shadow:1px 1px 3px #666;
 }
 .name > img {
